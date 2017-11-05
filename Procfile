@@ -1,1 +1,1 @@
-web: gunicorn budgme.wsgi --logfile -
+web: gunicorn budgme.wsgi --log-file -
