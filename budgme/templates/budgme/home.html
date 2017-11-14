@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Hello Budgeme!</title>
-</head>
-<body>
-    <h1>Hello Budgme!</h1>
-</body>
-</html>
+{% extends "budgme/base.html" %}
+
+{% block body %}
+    <div class="container">
+        <ul class="nav nav-pills">
+          <li role="presentation" class="active"><a href="#">Home</a></li>
+          <li role="presentation"><a href="#">Profile</a></li>
+          <li role="presentation"><a href="#">Messages</a></li>
+        </ul>
+    </div>
+{% endblock %}
