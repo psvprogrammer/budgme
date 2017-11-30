@@ -1,0 +1,42 @@
+.btn-rectangle{
+	border-radius: 0 !important;
+}
+
+.btn-group-menu{
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+.logo-style{
+	margin-top: -10px;
+	float: right;
+}
+.logo-style img{
+	height: 40px;
+}
+.no-padding{
+	padding: 0;
+}
+.one-line{
+	overflow: hidden;
+    white-space: nowrap;
+}
+
+.btn-link-categories{
+	position: absolute;
+    width: 60px !important;
+    height: 60px;
+    top: 5px;
+    border-radius: 50%;
+    border-color: white;
+    border-style: dashed;
+}
+.btn-link-categories-left{
+	right: 10px;
+}
+.btn-link-categories-right{
+	left: 10px;
+}
+.btn-link-categories span{
+	font-size: 25px;
+    top: 6px;
+}

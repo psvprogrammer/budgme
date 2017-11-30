@@ -1,11 +1,11 @@
-{% extends "budgme/base.html" %}
+{% extends "budgme/master.html" %}
 
 {% block body %}
-    <div class="container">
-        <ul class="nav nav-pills">
-          <li role="presentation" class="active"><a href="#">Home</a></li>
-          <li role="presentation"><a href="#">Profile</a></li>
-          <li role="presentation"><a href="#">Messages</a></li>
-        </ul>
+    <div class="jumbotron">
+      <div class="container" style="text-align: center;">
+        <h1>Welcome to Budgme!</h1>
+        <p>To continue you should login or register your free anonymous account.</p>
+        <p><a class="btn btn-primary btn-lg" href="/login" role="button">Login</a> or <a class="btn btn-primary btn-lg" href="/register" role="button">Register</a></p>
+      </div>
     </div>
 {% endblock %}
