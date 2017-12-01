@@ -21,11 +21,12 @@
       <![endif]-->
   </head>
   <body>
-      {% if user.is_authenticated %}
-          {% include 'budgme/menu/authorized_menu.html' %}
-      {% else %}
-          {% include 'budgme/menu/unauthorized_menu.html' %}
-      {% endif %}
+  {% include 'budgme/menu/authorized_menu.html' %}
+{#      {% if user.is_authenticated %}#}
+{#          {% include 'budgme/menu/authorized_menu.html' %}#}
+{#      {% else %}#}
+{#          {% include 'budgme/menu/unauthorized_menu.html' %}#}
+{#      {% endif %}#}
 
       {% block body %}{% endblock %}
 
