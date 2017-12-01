@@ -1,11 +1,11 @@
 {% load staticfiles %}
 <div class="container-fluid">
-  <div class="col-lg-1 hidden-md"><!-- ZERO DIV WITH LOGO -->
-    <a href="/" class="navbar-brand custom-brand-logo logo-style">
-        <img src="{% static 'budgme/budgme_logo_big.png' %}">
-    </a>
-  </div>
-  <div class="col-12 col-lg-10">
+{#  <div class="col-lg-1 hidden-md"><!-- ZERO DIV WITH LOGO -->#}
+{#    <a href="/" class="navbar-brand custom-brand-logo logo-style">#}
+{#        <img src="{% static 'budgme/budgme_logo_big.png' %}">#}
+{#    </a>#}
+{#  </div>#}
+  <div class="row">
     <nav class="navbar navbar-default" style="margin: 0px;">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#budgets-div" aria-expanded="false">
@@ -14,74 +14,72 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <div class="hidden-lg hidden-md hidden-sm"><!-- ZERO DIV WITH LOGO -->
-            <a href="/" class="navbar-brand custom-brand-logo logo-style">
+{#          <div class="hidden-lg hidden-md hidden-sm"><!-- ZERO DIV WITH LOGO -->#}
+            <a href="/" class="navbar-brand custom-brand-logo logo-style hidden-xl hidden-lg hidden-md hidden-sm">
                 <img src="{% static 'budgme/budgme_logo_big.png' %}">
             </a>
-          </div>
+{#          </div>#}
         </div>
         <div class="collapse navbar-collapse" id="budgets-div">
             <div class="row">
-            <div class="col-12 col-sm-3 col-xl-2"><!-- FIRST DIV "Budgets" -->
-                <div class="row">
-                  <form action="/budgets" method="GET">
-                    <div class="btn-group btn-group-menu">
-                        <button type="submit" class="btn btn-primary" style="font-size: 18px;">Budgets
-                          <!-- if user have income budgets (not approved) > 0 -->
-                          <span class="badge">1</span>
-                          <!-- -->
-                        </button>
+                <div style="width: 25%;"><!-- FIRST DIV "Budgets" -->
 
-                        <!-- if user have more than one budget -->
-                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#choose-budget-div">
-                          <span class="glyphicon glyphicon-transfer" style="font-size: 20px;"></span>
-                        </button>
-                        <!-- -->
+                      <form action="/budgets" method="GET">
+                        <div class="btn-group btn-group-menu">
+                            <button type="submit" class="btn btn-primary" style="font-size: 18px;">Budgets
+                              <!-- if user have income budgets (not approved) > 0 -->
+                              <span class="badge">1</span>
+                              <!-- -->
+                            </button>
+
+                            <!-- if user have more than one budget -->
+                            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#choose-budget-div">
+                              <span class="glyphicon glyphicon-transfer" style="font-size: 20px;"></span>
+                            </button>
+                            <!-- -->
+                        </div>
+                      </form><!-- form /budgets -->
+
+                </div><!-- #budgets-div -->
+                <div style="width: 50%;"><!--  CENTRAL DIV "Incomes/Outcomes" -->
+                    <div class="col-md-6 no-padding one-line">
+                      <!-- btn plus "add income" -->
+                      <div class="btn-group-justified" role="group">
+                          <a href="/add-income" class="btn btn-default btn-rectangle" style="width: 20%;"><span class="glyphicon glyphicon-plus" style="font-size: 25px;"></span></a>
+                          <a href="/incomes" class="btn btn-success btn-rectangle" style="width: 80%;"><span class="glyphicon glyphicon-circle-arrow-down" style="font-size: 20px;"></span><br/>Incomes
+                            <!-- if user have new incomes (not seen) > 0 -->
+                            <span class="badge">3</span>
+                            <!-- -->
+                          </a>
+                          <a href="/income-categories" class="btn btn-info btn-link-categories btn-link-categories-left"><span class="glyphicon glyphicon-off gly-rotate-90"></span></a>
+                      </div>
                     </div>
-                  </form><!-- form /budgets -->
+                    <div class="col-md-6 no-padding one-line">
+                      <!-- btn plus "add outcome" -->
+                      <div class="btn-group-justified" role="group">
+                        <a href="/outcomes" class="btn btn-warning btn-rectangle" style="width: 80%;"><span class="glyphicon glyphicon-circle-arrow-up" style="font-size: 20px;"></span><br/>Outcomes
+                          <!-- if user have new outcomes (not seen) > 0 -->
+                          <span class="badge">2</span>
+                          <!-- -->
+                        </a>
+                        <a href="/add-outcome" class="btn btn-default btn-rectangle" style="width: 20%;"><span class="glyphicon glyphicon-plus" style="font-size: 25px;"></span></a>
+                        <a href="/outcome-categories" class="btn btn-info btn-link-categories btn-link-categories-right"><span class="glyphicon glyphicon-off gly-rotate-90"></span></a>
+                      </div>
+                    </div>
+                </div><!--  CENTRAL DIV "Incomes/Outcomes"  END -->
+                <div style="text-align: right; width: 25%;"><!-- LAST DIV "Month/Profile" -->
+                  <form action="/profile" method="GET">
+                    <div class="btn-group btn-group-menu">
+                      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Month <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Week</a></li>
+                        <li><a href="#">Day</a></li>
+                        <li><a href="#">Hour</a></li>
+                      </ul>
+                      <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-tasks" style="font-size: 20px;"></span></button>
+                    </div>
+                  </form><!-- form /profile -->
                 </div>
-            </div><!-- #budgets-div -->
-            <div class="col-12 col-sm-6 col-xl-8"><!--  CENTRAL DIV "Incomes/Outcomes" -->
-              <div class="row">
-                <div class="col-md-6 no-padding one-line">
-                  <!-- btn plus "add income" -->
-                  <div class="btn-group-justified" role="group">
-                      <a href="/add-income" class="btn btn-default btn-rectangle" style="width: 20%;"><span class="glyphicon glyphicon-plus" style="font-size: 25px;"></span></a>
-                      <a href="/incomes" class="btn btn-success btn-rectangle" style="width: 80%;"><span class="glyphicon glyphicon-circle-arrow-down" style="font-size: 20px;"></span><br/>Incomes
-                        <!-- if user have new incomes (not seen) > 0 -->
-                        <span class="badge">3</span>
-                        <!-- -->
-                      </a>
-                      <a href="/income-categories" class="btn btn-info btn-link-categories btn-link-categories-left"><span class="glyphicon glyphicon-off gly-rotate-90"></span></a>
-                  </div>
-                </div>
-                <div class="col-md-6 no-padding one-line">
-                  <!-- btn plus "add outcome" -->
-                  <div class="btn-group-justified" role="group">
-                    <a href="/outcomes" class="btn btn-warning btn-rectangle" style="width: 80%;"><span class="glyphicon glyphicon-circle-arrow-up" style="font-size: 20px;"></span><br/>Outcomes
-                      <!-- if user have new outcomes (not seen) > 0 -->
-                      <span class="badge">2</span>
-                      <!-- -->
-                    </a>
-                    <a href="/add-outcome" class="btn btn-default btn-rectangle" style="width: 20%;"><span class="glyphicon glyphicon-plus" style="font-size: 25px;"></span></a>
-                    <a href="/outcome-categories" class="btn btn-info btn-link-categories btn-link-categories-right"><span class="glyphicon glyphicon-off gly-rotate-90"></span></a>
-                  </div>
-                </div>
-              </div>
-            </div><!--  CENTRAL DIV "Incomes/Outcomes"  END -->
-            <div class="col-12 col-sm-3 col-xl-2" style="text-align: right;"><!-- LAST DIV "Month/Profile" -->
-              <form action="/profile" method="GET">
-                <div class="btn-group btn-group-menu">
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Month <span class="caret"></span></button>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Week</a></li>
-                    <li><a href="#">Day</a></li>
-                    <li><a href="#">Hour</a></li>
-                  </ul>
-                  <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-tasks" style="font-size: 20px;"></span></button>
-                </div>
-              </form><!-- form /profile -->
-            </div>
             </div>
         </div>
     </nav>
