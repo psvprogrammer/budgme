@@ -23,12 +23,14 @@
 
 .btn-link-categories{
 	position: absolute;
-    width: 60px !important;
-    height: 60px;
+    width: 40px !important;
+    height: 40px;
     top: 5px;
     border-radius: 50%;
     border-color: white;
     border-style: dotted;
+    padding-top: 9px;
+    padding-left: 6px;
 }
 .btn-link-categories-left{
 	right: 10px;
