@@ -137,42 +137,30 @@
             </div>
         </div><!-- xl-menu-div END -->
 
-        <div id="change-period-div" class="collapse container-fluid">
-            <div class="btn-group-justified" role="group">
-                <a href="#" class="active btn btn-info btn-rectangle">Month</a>
-                <a href="#" class="btn btn-info btn-rectangle">Week</a>
-                <a href="#" class="btn btn-info btn-rectangle">Day</a>
-                <a href="#" class="btn btn-info btn-rectangle">Hour</a>
-                <a href="#" class="btn btn-info btn-rectangle">Custom</a>
-            </div>
-        </div>
-
     </nav>
   </div>
 </div>
 
-
-
 <!-- if user have <=3 budgets -->
-<div id="choose-budget-div" class="collapse container-fluid">
-    <div class="btn-group-justified" role="group">
-      <!-- foreach user budget -->
-      <a href="#" class="active btn btn-info btn-rectangle">Default</a>
-      <!-- -->
-      <a href="#" class="btn btn-info btn-rectangle">Second</a>
-      <a href="#" class="btn btn-info btn-rectangle">Third</a>
-    </div>
-</div>
+{#<div id="choose-budget-div" class="collapse container-fluid">#}
+{#    <div class="btn-group-justified" role="group">#}
+{#      <!-- foreach user budget -->#}
+{#      <a href="#" class="active btn btn-info btn-rectangle">Default</a>#}
+{#      <!-- -->#}
+{#      <a href="#" class="btn btn-info btn-rectangle">Second</a>#}
+{#      <a href="#" class="btn btn-info btn-rectangle">Third</a>#}
+{#    </div>#}
+{#</div>#}
 <!-- -->
 
-<!-- if user have more than 3 active budgets --
+<!-- if user have more than 3 active budgets -->
 <div id="choose-budget-div" class="collapse container">
     <div class="btn-group btn-block" role="group">
       <button type="button" class="btn btn-info dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Primary <span class="caret"></span></button>
       <ul class="dropdown-menu btn-block">
-        <!-- for each budget --
+        <!-- for each budget -->
         <li><a href="#">Action</a></li>
-        <!-- --
+        <!-- -->
         <li><a href="#">Another action</a></li>
         <li><a href="#">Something else here</a></li>
         <li role="separator" class="divider"></li>
@@ -181,3 +169,13 @@
     </div>
 </div>
 <!-- -->
+
+<div id="change-period-div" class="collapse container-fluid">
+    <div class="btn-group-justified" role="group">
+        <a href="#" class="active btn btn-info btn-rectangle">Month</a>
+        <a href="#" class="btn btn-info btn-rectangle">Week</a>
+        <a href="#" class="btn btn-info btn-rectangle">Day</a>
+        <a href="#" class="btn btn-info btn-rectangle">Hour</a>
+        <a href="#" class="btn btn-info btn-rectangle">Custom</a>
+    </div>
+</div>
