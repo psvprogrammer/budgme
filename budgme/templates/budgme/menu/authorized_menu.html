@@ -27,7 +27,7 @@
                   <div class="row">
                     <div class="col-xs-6 no-padding one-line">
                       <div class="btn-group-justified" role="group">
-                          <a href="/budgets" class="btn btn-primary" style="font-size: large; width: 60%;">Budgets
+                          <a href="/budgets" class="btn btn-primary" style="font-size: small; width: 60%;">Budgets
                           <!-- if user have income budgets (not approved) > 0 -->
                           <span class="badge">1</span>
                           <!-- -->
@@ -137,19 +137,21 @@
             </div>
         </div><!-- xl-menu-div END -->
 
+        <div id="change-period-div" class="collapse container-fluid">
+            <div class="btn-group-justified" role="group">
+                <a href="#" class="active btn btn-info btn-rectangle">Month</a>
+                <a href="#" class="btn btn-info btn-rectangle">Week</a>
+                <a href="#" class="btn btn-info btn-rectangle">Day</a>
+                <a href="#" class="btn btn-info btn-rectangle">Hour</a>
+                <a href="#" class="btn btn-info btn-rectangle">Custom</a>
+            </div>
+        </div>
+
     </nav>
   </div>
 </div>
 
-<div id="change-period-div" class="collapse container-fluid">
-    <div class="btn-group-justified" role="group">
-        <a href="#" class="active btn btn-info btn-rectangle">Month</a>
-        <a href="#" class="btn btn-info btn-rectangle">Week</a>
-        <a href="#" class="btn btn-info btn-rectangle">Day</a>
-        <a href="#" class="btn btn-info btn-rectangle">Hour</a>
-        <a href="#" class="btn btn-info btn-rectangle">Custom</a>
-    </div>
-</div>
+
 
 <!-- if user have <=3 budgets -->
 <div id="choose-budget-div" class="collapse container-fluid">
