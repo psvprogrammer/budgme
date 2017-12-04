@@ -1,11 +1,12 @@
 {% extends "budgme/master.html" %}
+{% load staticfiles %}
 
-{% block body %}
+{% block content %}
     <div class="jumbotron">
       <div class="container" style="text-align: center;">
         <h1>Welcome to Budgme!</h1>
         <p>To continue you should login or register your free anonymous account.</p>
-        <p><a class="btn btn-primary btn-lg" href="/login" role="button">Login</a> or <a class="btn btn-primary btn-lg" href="/register" role="button">Register</a></p>
+        <p><a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Login</a> or <a class="btn btn-primary btn-lg" href="/register" role="button">Register</a></p>
       </div>
     </div>
 {% endblock %}

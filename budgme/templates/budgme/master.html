@@ -22,21 +22,18 @@
       <![endif]-->
   </head>
   <body class="container">
-  {% include 'budgme/menu/authorized_menu.html' %}
+{#  {% include 'budgme/menu/authorized_menu.html' %}#}
 {#  {% include 'budgme/menu/test_menu.html' %}#}
 
-{#      {% if user.is_authenticated %}#}
-{#          {% include 'budgme/menu/authorized_menu.html' %}#}
-{#      {% else %}#}
-{#          {% include 'budgme/menu/unauthorized_menu.html' %}#}
-{#      {% endif %}#}
+      {% if user.is_authenticated %}
+          {% include 'budgme/menu/authorized_menu.html' %}
+      {% else %}
+          {% include 'budgme/menu/unauthorized_menu.html' %}
+      {% endif %}
 
-      {% block body %}{% endblock %}
+      {% block content %}{% endblock %}
 
-      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-      <!-- Include all compiled plugins (below), or include individual files as needed -->
-      <!-- La<h3>test</h3> compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      {% include 'budgme/scripts.html' %}
+      {% block scripts %}{% endblock %}
   </body>
 </html>
