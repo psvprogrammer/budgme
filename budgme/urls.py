@@ -24,6 +24,7 @@ from django.contrib.auth.views import login, logout,\
 from datetime import datetime
 from budgme import views
 from budgme.forms import CustomAuthenticationForm, CustomPasswordChangeForm
+from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -35,7 +36,7 @@ urlpatterns = [
             'authentication_form': CustomAuthenticationForm,
             'extra_context':
                 {
-                    'title': 'Залогуйтеся, будь ласка',
+                    'title': _('Login, please'),
                     'year': datetime.now().year,
                 }
         }, name='login'),
@@ -49,7 +50,7 @@ urlpatterns = [
             'password_change_form': CustomPasswordChangeForm,
             'extra_context':
                 {
-                    'title': 'Ви можете змінити Ваш пароль'
+                    'title': _('You can change your password')
                 }
         }, name='password_change'),
     url(r'^password_change/done/$', password_change_done,

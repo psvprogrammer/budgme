@@ -1,17 +1,18 @@
 {% load staticfiles %}
 <div class="container-fluid">
-  <div class="col-lg-1 hidden-md"><!-- ZERO DIV WITH LOGO -->
-    <a href="/" class="navbar-brand custom-brand-logo logo-style">
-        <img src="{% static 'budgme/budgme_logo_big.png' %}">
-    </a>
-  </div>
-  <div class="col-12 col-lg-10">
-    <nav class="navbar navbar-default" style="margin: 0px;">
-        <div style="float: right; width: 100px;"><!-- "Login button" -->
-            <div class="btn-group-justified">
-              <a href="/login" class="btn btn-default btn-rectangle" style="height: 60px;"><span class="glyphicon glyphicon-folder-open gly-rotate-270" style="font-size: 25px;"></span></a>
+  <div class="col-xs-12">
+    <nav class="navbar navbar-default">
+        <div class="row">
+            <div class="col-xs-6" style="text-align: left; margin-top: 10px;">
+                <a href="/" class="btn btn-inverse logo-style">
+                    <img src="{% static 'budgme/budgme_logo_big.png' %}">
+                </a>
             </div>
-
+            <div class="col-xs-6" style="text-align: right;">
+                <div class="btn-group">
+                  <a href="{% url 'login' %}" class="btn btn-default btn-rectangle" style="height: 64px;"><span class="glyphicon glyphicon-folder-open gly-rotate-270" style="font-size: 25px;"></span></a>
+                </div>
+            </div>
         </div>
     </nav>
   </div>
