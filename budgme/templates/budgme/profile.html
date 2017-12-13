@@ -1,0 +1,87 @@
+{% extends "budgme/master.html" %}
+{% load i18n %}
+
+{% block content %}
+{% if test_message %}
+<div class="container fadeout-slowly-3">
+  <div class="col-lg-6 col-sm-6 col-xs-12 float-left text-center" role="alert" style="position: absolute; right: 105px; top: 100px;">
+    <h4><span class="label label-success">{{ test_message }}</span></h4>
+  </div>
+</div>
+{% endif %}
+<form action="{% url 'profile' %}" method="POST">
+{% csrf_token %}
+<div class="container">
+    <div class="col-lg-10 col-sm-10 col-xs-12 col-lg-offset-1 col-sm-offset-1 bhoechie-tab-container">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 bhoechie-tab-menu">
+          <div class="list-group">
+            <a href="" class="list-group-item active">
+              <h4 class="glyphicon glyphicon-home"></h4>&nbsp;{% trans "Home page" %}
+            </a>
+            <a href="" class="list-group-item">
+              <h4 class="glyphicon glyphicon-circle-arrow-down"></h4>&nbsp;{% trans "Default income category" %}
+            </a>
+            <a href="" class="list-group-item">
+              <h4 class="glyphicon glyphicon-circle-arrow-up"></h4>&nbsp;{% trans "Default outcome category" %}
+            </a>
+            <a href="" class="list-group-item">
+              <h4 class="glyphicon glyphicon-globe"></h4>&nbsp;{% trans "Language" %}
+            </a>
+            <input type="submit" value="{% trans 'Save' %}" class="btn btn-lg btn-primary btn-rectangle" style="float: right; margin-top: 10px;">
+          </div>
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 bhoechie-tab">
+            <!-- Home page category div -->
+            <div class="bhoechie-tab-content active">
+                <center>
+                  <h1 class="glyphicon glyphicon-plane" style="font-size:14em;"></h1>
+                  <h2 style="margin-top: 0;">Cooming Soon</h2>
+                  <h3 style="margin-top: 0;">Flight Reservation</h3>
+                </center>
+            </div>
+            <!-- Default income category -->
+            <div class="bhoechie-tab-content">
+                <center>
+                  <h1 class="glyphicon glyphicon-road" style="font-size:12em;"></h1>
+                  <h2 style="margin-top: 0;">Cooming Soon</h2>
+                  <h3 style="margin-top: 0;">Train Reservation</h3>
+                </center>
+            </div>
+            <!-- Default outcome category div -->
+            <div class="bhoechie-tab-content">
+                <center>
+                  <h1 class="glyphicon glyphicon-home" style="font-size:12em;"></h1>
+                  <h2 style="margin-top: 0;">Cooming Soon</h2>
+                  <h3 style="margin-top: 0;">Hotel Directory</h3>
+                </center>
+            </div>
+            <!-- Language div -->
+            <div class="bhoechie-tab-content">
+                <center>
+                  <div class="form-group">
+                      <label for="language" class="col-md-2 control-label" style="padding: 10px 15px;">
+                        {% trans "Language" %}
+                      </label>
+                      <div class="col-md-10">
+                        <select class="form-control" id="language" name="language">
+                          <option value="en">{% trans "English" %}</option>
+                          <option value="uk">{% trans "Ukrainian" %}</option>
+                          <option value="ru">{% trans "Russian" %}</option>
+                        </select>
+                      </div>
+                  </div>
+                </center>
+            </div>
+            <!-- origin tab example
+            <div class="bhoechie-tab-content">
+                <center>
+                  <h1 class="glyphicon glyphicon-credit-card" style="font-size:12em;color:#55518a"></h1>
+                  <h2 style="margin-top: 0;color:#55518a">Cooming Soon</h2>
+                  <h3 style="margin-top: 0;color:#55518a">Credit Card</h3>
+                </center>
+            </div> -->
+        </div>
+    </div>
+</div>
+</form>
+{% endblock %}

@@ -57,6 +57,7 @@ urlpatterns = [
         {
             'template_name': 'app/password_change_done.html',
         }, name='password_change_done'),
+    url(r'^profile$', views.ProfileView.as_view(), name='profile'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

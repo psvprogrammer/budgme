@@ -12,6 +12,7 @@ from django.http import HttpRequest, HttpResponseRedirect
 from datetime import datetime
 from django.contrib.auth.decorators import login_required, permission_required
 from django.conf import settings
+from django.views import View
 
 from django.contrib.auth.models import Group
 # from app.forms import ClientProfileForm, UserProfileForm, EmployeeProfileForm,\
@@ -22,7 +23,23 @@ from django.core.exceptions import ObjectDoesNotExist
 # from django.template import RequestContext
 # from django_ajax.decorators import ajax
 from django.db.models import Q
+from django.utils.translation import ugettext_lazy as _
 
 
 def home(request):
     return render(request, 'budgme/home.html')
+
+
+def profile(request):
+    return render(request, 'budgme/profile.html')
+
+class ProfileView(View):
+    """docstring for Profile."""
+    def get(self, request, *args, **kwargs):
+        return render(request, 'budgme/profile.html')
+
+    def post(self, request, *args, **kwargs):
+        context = {
+            'test_message': _('Changes saved successfuly!'),
+        }
+        return render(request, 'budgme/profile.html', context)
