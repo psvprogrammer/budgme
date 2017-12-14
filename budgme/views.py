@@ -33,6 +33,7 @@ def home(request):
 def profile(request):
     return render(request, 'budgme/profile.html')
 
+
 class ProfileView(View):
     """docstring for Profile."""
     def get(self, request, *args, **kwargs):
@@ -42,4 +43,5 @@ class ProfileView(View):
         context = {
             'test_message': _('Changes saved successfuly!'),
         }
+        # print(request)
         return render(request, 'budgme/profile.html', context)
