@@ -1,6 +1,9 @@
 # Ignore local settings
 budgme/settings/local.py
 
+# Ignore migrations for now
+budgme/migrations/
+
 # local db.sqlite
 db.sqlite3
 
