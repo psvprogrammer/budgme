@@ -3,13 +3,28 @@ Models Definition
 """
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.signals import user_logged_in
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import format_lazy
+from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 
 
 User = get_user_model()
+
+
+def user_logged_in_set_default_budget_cookie(sender, request, user,
+                                             *args, **kwargs):
+    """Set default budget in cookie if no such cookie yet"""
+    try:
+        request.get_signed_cookie('budget')
+    except KeyError:
+        default_budget = Profile.objects.get(user=user).default_budget.name
+        request.session['budget'] = default_budget
+
+
+user_logged_in.connect(user_logged_in_set_default_budget_cookie)
 
 
 def user_post_save_profile_creation(sender, instance, created,
@@ -69,7 +84,7 @@ class IncomeCategory(models.Model):
     description = models.CharField(_('Description'), null=True, blank=True,
                                    help_text=_('Describe what is for this '
                                                'income category'),
-                                   max_length=254)
+                                   max_length=254, default='')
 
     def __str__(self):
         return str(format_lazy('{name}, budget: {budget}',

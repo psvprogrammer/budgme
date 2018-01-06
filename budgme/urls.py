@@ -28,7 +28,7 @@ from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.Home.as_view(), name='home'),
 
     url(r'^login', login,
         {
@@ -58,6 +58,9 @@ urlpatterns = [
             'template_name': 'app/password_change_done.html',
         }, name='password_change_done'),
     url(r'^profile$', views.ProfileView.as_view(), name='profile'),
+    url(r'^income-categories$', views.IncomeCategories.as_view(), name='income_categories'),
+    url(r'^add-in-category$', views.add_income_category, name='add_in_cat'),
+    url(r'^edit-in-cat$', views.edit_income_category, name='edit_in_cat'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
