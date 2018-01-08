@@ -17,9 +17,8 @@ User = get_user_model()
 def user_logged_in_set_default_budget_cookie(sender, request, user,
                                              *args, **kwargs):
     """Set default budget in cookie if no such cookie yet"""
-    try:
-        request.get_signed_cookie('budget')
-    except KeyError:
+    default_budget = request.session.get('budget')
+    if not default_budget:
         default_budget = Profile.objects.get(user=user).default_budget.name
         request.session['budget'] = default_budget
 
