@@ -101,4 +101,4 @@ def add_income_category(request):
 @ajax
 @login_required
 def edit_income_category(request):
-    pass
+    return {}

@@ -23,7 +23,7 @@ def user_logged_in_set_default_budget_cookie(sender, request, user,
         request.session['budget'] = default_budget
 
 
-# user_logged_in.connect(user_logged_in_set_default_budget_cookie)
+user_logged_in.connect(user_logged_in_set_default_budget_cookie)
 
 
 def user_post_save_profile_creation(sender, instance, created,

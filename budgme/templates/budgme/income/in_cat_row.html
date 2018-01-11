@@ -1,11 +1,19 @@
 <tr id="in_cat-id_{{ income_category.id }}">
-    <td class="field">{{ income_category.name }}</td>
-    <td class="field">{{ income_category.description }}</td>
+    <td class="field">
+        <p>{{ income_category.name }}</p>
+        <input id="name-id_{{ income_category.id }}"
+               class="btn-group-justified btn-edit_in-cat" type="text"
+               placeholder=" name" name="name" style="display: none;"
+               value="{{ income_category.name }}">
+    </td>
+    <td class="field">
+        <p>{{ income_category.description }}</p>
+        <input id="description-id_{{ income_category.id }}"
+               class="btn-group-justified btn-edit_in-cat" type="text"
+               placeholder=" descripton" name="descripton" style="display: none;"
+               value="{{ income_category.description }}">
+    </td>
     <td class="buttons">
-{#        <a href="" id="btn-edit-in_cat-id_{{ income_category.id }}"#}
-{#           class="btn btn-primary table-btn btn-edit_in-cat" style="display: none;">Save</a>#}
-{#        <a href="" id="btn-cancel-in_cat-id_{{ income_category.id }}"#}
-{#           class="btn btn-warning table-btn" style="display: none;">Cancel</a>#}
         <button type="button" id="btn-edit-in_cat-id_{{ income_category.id }}"
            class="btn btn-primary table-btn btn-edit_in-cat" style="display: none;">Save</button>
         <button type="button" id="btn-cancel-in_cat-id_{{ income_category.id }}"

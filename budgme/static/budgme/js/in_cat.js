@@ -10,7 +10,7 @@ $(document).ready(function(){
 
             if (event.target.tagName == 'BUTTON'){
                 if (event.target.innerText == 'Save'){
-                    edit_in_cat(id, row_elem);
+                    save_in_cat(id);
                 }
                 focusout_row(id, row_elem, event);
             }
@@ -33,9 +33,19 @@ function focusin_row(id, row_elem, event) {
     if (!row_elem){
         row_elem = $('#in_cat-id_'+id);
     }
-    row_elem.find('td').each(function () {
-        $(this).prop('contenteditable', true);
+
+    // row_elem.find('td.field').each(function () {
+    //     $(this).prop('contenteditable', true);
+    // });
+    row_elem.find('td.field').each(function () {
+        p = $(this).find('p');
+        input = $(this).find('input');
+
+        // input.prop('value', p.html());
+        p.hide();
+        input.show();
     });
+
     $("#btn-edit-in_cat-id_"+id).show();
     $("#btn-cancel-in_cat-id_"+id).show();
     if (event){
@@ -56,9 +66,19 @@ function focusout_row(id, row_elem, event) {
     if (!row_elem){
         row_elem = $('#in_cat-id_'+id);
     }
-    row_elem.find('td').each(function () {
-        $(this).prop('contenteditable', false);
+
+    // row_elem.find('td.field').each(function () {
+    //     $(this).prop('contenteditable', false);
+    // });
+    row_elem.find('td.field').each(function () {
+        p = $(this).find('p');
+        input = $(this).find('input');
+
+        // p.html(input.prop('value'));
+        p.show();
+        input.hide();
     });
+
     $("#btn-edit-in_cat-id_"+id).hide();
     $("#btn-cancel-in_cat-id_"+id).hide();
     row_elem.focusout();
@@ -67,19 +87,27 @@ function focusout_row(id, row_elem, event) {
     }
 }
 
-function edit_in_cat(id, row_elem) {
-    test = row_elem;
-    console.log('id edit: ' + id);
-    // ajaxPost('/edit-in-cat', {}, function (content) {
-    //     //on success
-    // });
+function save_in_cat(id) {
+    name_elem = $('input#name-id_' + id);
+    descr_elem = $('input#description-id_' + id);
+    data = {
+        id: id,
+        name: name_elem.prop('value'),
+        description: descr_elem.prop('value'),
+    };
+    ajaxPost('/edit-in-cat', data, function (content) {
+        //on success
+        console.log('ajaxPost success!');
+        name_elem.parent().find('p').html(name_elem.prop('value'));
+        descr_elem.parent().find('p').html(descr_elem.prop('value'));
+    });
 }
 
 $("a#btn-show-new-in-cat-row").click(function(event){
     event.preventDefault();
     $(this).hide();
     $("#table-new-in_cat").show();
-    $("#btn-cancel-new-in-cat").show();
+    // $("#btn-cancel-new-in-cat").show();
 });
 
 $("#btn-cancel-new-in-cat").click(function(event){
