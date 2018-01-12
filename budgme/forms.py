@@ -5,6 +5,8 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 
+from budgme import models
+
 User = get_user_model()
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -43,3 +45,13 @@ class CustomPasswordChangeForm(PasswordChangeForm):
                                         'class': 'form-control',
                                         'placeholder': _('new password again')
                                     }))
+
+
+class EditIncomeCategoryForm(forms.ModelForm):
+    class Meta:
+        model = models.IncomeCategory
+        fields = [
+            'id',
+            'name',
+            'description',
+        ]

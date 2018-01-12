@@ -47,3 +47,20 @@
 	padding: 0px 20px 0px 20px;
 	margin: 0px 5px;
 }
+.table-p{
+	font-weight: bold;
+    /*font-size: large;*/
+}
+.popover-error{
+	background-color: lightcoral;
+    color: white;
+    font-weight: bold;
+}
+.popover-success{
+	background-color: lightgreen;
+    color: white;
+    font-weight: bold;
+}
+.popover-left{
+	left: 20% !important;
+}

@@ -1,4 +1,5 @@
-<tr id="in_cat-id_{{ income_category.id }}">
+<tr id="in_cat-id_{{ income_category.id }}"
+    data-container="body" data-toggle="popover" data-placement="bottom">
     <td class="field">
         <p>{{ income_category.name }}</p>
         <input id="name-id_{{ income_category.id }}"
@@ -20,3 +21,9 @@
            class="btn btn-warning table-btn" style="display: none;">Cancel</button>
     </td>
 </tr>
+{#<tr id="errors-in_cat-id_{{ income_category.id }}" style="display: none;">#}
+{#    <td colspan="3" class="danger table-p"><p></p></td>#}
+{#</tr>#}
+{#<tr id="info-in_cat-id_{{ income_category.id }}" style="display: none;">#}
+{#    <td colspan="3" class="success table-p"><p></p></td>#}
+{#</tr>#}

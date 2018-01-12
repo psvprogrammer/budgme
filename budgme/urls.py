@@ -62,7 +62,7 @@ urlpatterns = [
 
     # ajax urls
     url(r'^add-in-category$', views.add_income_category, name='add_in_cat'),
-    url(r'^edit-in-cat$', views.edit_income_category, name='edit_in_cat'),
+    url(r'^edit-in-cat$', views.EditIncomeCategoryView.as_view(), name='edit_in_cat'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

@@ -13,7 +13,8 @@ from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, FormView
+from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.models import Group
 # from app.forms import ClientProfileForm, UserProfileForm, EmployeeProfileForm,\
@@ -29,15 +30,17 @@ from django.db.models import Q
 
 
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __
 from django.utils.translation import activate, get_language_info
 # from django_ajax.mixin import AJAXMixin
 from django_ajax.decorators import ajax
 
 from budgme.models import Budget, IncomeCategory, Profile
+from budgme import forms
 
-COOKIE_DECORATORS = [
+AJAX_DECORATORS = [
     login_required,
-
+    ajax,
 ]
 
 
@@ -54,7 +57,7 @@ def get_current_budget(request):
     return budget
 
 
-@method_decorator(COOKIE_DECORATORS, name='check_cookie')
+@method_decorator(AJAX_DECORATORS, name='check_cookie')
 class CheckCookieMixin:
     def check_cookie(self, request, *args, **kwargs):
         pass
@@ -98,7 +101,68 @@ class IncomeCategories(LoginRequiredMixin, ListView):
 def add_income_category(request):
     pass
 
-@ajax
-@login_required
-def edit_income_category(request):
-    return {}
+
+@method_decorator(AJAX_DECORATORS, name='post')
+class EditIncomeCategoryView(View):
+    def __init__(self):
+        self.result = {}
+
+    def post(self, request, *args, **kwargs):
+        form = forms.EditIncomeCategoryForm(request.POST)
+        if form.is_valid():
+            budget = get_current_budget(request)
+            category_name_exist = IncomeCategory.objects.filter(
+                Q(budget=budget) &
+                Q(name=form.cleaned_data.get('name')) &
+                ~Q(id=request.POST['id'])).count() > 0
+            if category_name_exist:
+                self._fail_result(
+                    msg=__('Name must be unique for this budget!'))
+                # result.update({
+                #     'success': False,
+                #     'title': 'Error',
+                #     'content': __('You already have income category with this name!'),
+                #     'template': render(request, 'budgme/popovers/in_cat_error.html'),
+                # })
+                return self.result
+            try:
+                category = IncomeCategory.objects.get(
+                    id=request.POST['id'], budget=budget)
+            except ObjectDoesNotExist:
+                self._fail_result(msg=__('Can not find this category in DB!'))
+                # result.update({
+                #     'success': False,
+                #     'errors': __('Can not find this category in DB!'),
+                # })
+                return self.result
+
+            for field in form.changed_data:
+                setattr(category, field, form.cleaned_data.get(field))
+            category.save()
+            self._success_result()
+            # result.update({
+            #     'msg': __('Changes saved'),
+            # })
+        else:
+            self._fail_result(msg=__('Check for required fields!'))
+        return self.result
+
+    def _fail_result(self, title=__('Error'),
+                     msg=__('Fail to save your changes')):
+        self.result.update({
+            'success': False,
+            'title': title,
+            'content': msg,
+            'template': render(
+                self.request, 'budgme/popovers/in_cat_error.html'),
+        })
+
+    def _success_result(self, title=__('Success'),
+                        msg=__('Your changes saved!')):
+        self.result.update({
+            'success': True,
+            'title': title,
+            'content': msg,
+            'template': render(
+                self.request, 'budgme/popovers/in_cat_success.html'),
+        })

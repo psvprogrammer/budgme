@@ -1,6 +1,7 @@
 $(document).ready(function(){
     $("#table-new-in_cat").hide();
     $("#btn-cancel-new-in-cat").hide();
+    // $('[data-toggle="popover"]').popover({delay: { hide: 3000 }});
 
     $("#table-in_cat>tbody>tr>td").each(function () {
 
@@ -27,6 +28,16 @@ $(document).ready(function(){
             }
         });
     });
+
+    // bind enter key press with 'save' button click
+    $("#table-in_cat>tbody>tr>td.field").each(function () {
+        $(this).on('keypress', function (e) {
+            if(e.which === 13){
+                id = $(this).parent().prop('id').replace('in_cat-id_', '');
+                $("#btn-edit-in_cat-id_" + id).click();
+            }
+        });
+   });
 });
 
 function focusin_row(id, row_elem, event) {
@@ -49,6 +60,8 @@ function focusin_row(id, row_elem, event) {
     $("#btn-edit-in_cat-id_"+id).show();
     $("#btn-cancel-in_cat-id_"+id).show();
     if (event){
+        test = event.target;
+        
         event.target.focus();
         event.stopPropagation();
     }
@@ -90,17 +103,50 @@ function focusout_row(id, row_elem, event) {
 function save_in_cat(id) {
     name_elem = $('input#name-id_' + id);
     descr_elem = $('input#description-id_' + id);
-    data = {
-        id: id,
-        name: name_elem.prop('value'),
-        description: descr_elem.prop('value'),
-    };
-    ajaxPost('/edit-in-cat', data, function (content) {
-        //on success
-        console.log('ajaxPost success!');
-        name_elem.parent().find('p').html(name_elem.prop('value'));
-        descr_elem.parent().find('p').html(descr_elem.prop('value'));
-    });
+
+    name = name_elem.parent().find('p').html();
+    descr = descr_elem.parent().find('p').html();
+    new_name = name_elem.prop('value');
+    new_descr = descr_elem.prop('value');
+    if (name != new_name || descr != new_descr){
+        // if any changes - save them!
+        data = {
+            id: id,
+            name: new_name,
+            description: new_descr,
+        };
+        ajaxPost('/edit-in-cat', data, function (content) {
+            //on success
+            test = content;
+            row = $("#in_cat-id_" + id);
+            row.popover({
+                // selector: "#in_cat-id_" + id,
+                delay: { hide: 3000 },
+                title: content.title,
+                content: content.content,
+                template: content.template,
+                trigger: 'click|focus',
+            });
+            console.log('ajaxPost success! id: ' + id);
+
+            row.popover('show');
+            row.popover('toggle');
+            $("#btn-edit-in_cat-id_" + id).prop('disabled', true);
+            $(this).delay(3000).queue(function() {
+                row.popover('destroy');
+                $("#btn-edit-in_cat-id_" + id).prop('disabled', false);
+                $(this).dequeue();
+            });
+
+            if (content.success){
+                name_elem.parent().find('p').html(name_elem.prop('value'));
+                descr_elem.parent().find('p').html(descr_elem.prop('value'));
+            }
+            else{
+                focusin_row(id);
+            }
+        });
+    }
 }
 
 $("a#btn-show-new-in-cat-row").click(function(event){
