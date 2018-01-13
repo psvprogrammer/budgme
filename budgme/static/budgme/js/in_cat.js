@@ -61,8 +61,9 @@ function focusin_row(id, row_elem, event) {
     $("#btn-cancel-in_cat-id_"+id).show();
     if (event){
         test = event.target;
-        
-        event.target.focus();
+
+        // event.target.focus();
+        $("input#new_" + event.target.id).focus();
         event.stopPropagation();
     }
 
@@ -101,8 +102,8 @@ function focusout_row(id, row_elem, event) {
 }
 
 function save_in_cat(id) {
-    name_elem = $('input#name-id_' + id);
-    descr_elem = $('input#description-id_' + id);
+    name_elem = $('input#new_name-id_' + id);
+    descr_elem = $('input#new_description-id_' + id);
 
     name = name_elem.parent().find('p').html();
     descr = descr_elem.parent().find('p').html();

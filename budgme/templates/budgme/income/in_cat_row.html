@@ -1,29 +1,25 @@
 <tr id="in_cat-id_{{ income_category.id }}"
     data-container="body" data-toggle="popover" data-placement="bottom">
     <td class="field">
-        <p>{{ income_category.name }}</p>
-        <input id="name-id_{{ income_category.id }}"
+        <p id="name-id_{{ income_category.id }}">{{ income_category.name }}</p>
+        <input id="new_name-id_{{ income_category.id }}"
                class="btn-group-justified btn-edit_in-cat" type="text"
                placeholder=" name" name="name" style="display: none;"
                value="{{ income_category.name }}">
     </td>
     <td class="field">
-        <p>{{ income_category.description }}</p>
-        <input id="description-id_{{ income_category.id }}"
+        <p id="description-id_{{ income_category.id }}">{{ income_category.description }}</p>
+        <input id="new_description-id_{{ income_category.id }}"
                class="btn-group-justified btn-edit_in-cat" type="text"
                placeholder=" descripton" name="descripton" style="display: none;"
                value="{{ income_category.description }}">
     </td>
-    <td class="buttons">
+    <td class="buttons text-right">
         <button type="button" id="btn-edit-in_cat-id_{{ income_category.id }}"
            class="btn btn-primary table-btn btn-edit_in-cat" style="display: none;">Save</button>
         <button type="button" id="btn-cancel-in_cat-id_{{ income_category.id }}"
            class="btn btn-warning table-btn" style="display: none;">Cancel</button>
+        <button type="button" id="btn-del-in_cat-id_{{ income_category.id }}"
+           class="btn btn-danger table-btn">Delete</button>
     </td>
 </tr>
-{#<tr id="errors-in_cat-id_{{ income_category.id }}" style="display: none;">#}
-{#    <td colspan="3" class="danger table-p"><p></p></td>#}
-{#</tr>#}
-{#<tr id="info-in_cat-id_{{ income_category.id }}" style="display: none;">#}
-{#    <td colspan="3" class="success table-p"><p></p></td>#}
-{#</tr>#}

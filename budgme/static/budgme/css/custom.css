@@ -64,3 +64,7 @@
 .popover-left{
 	left: 20% !important;
 }
+#loader-animation{
+	text-align: center;
+	padding: 20px;
+}

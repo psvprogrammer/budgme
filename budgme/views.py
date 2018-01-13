@@ -166,3 +166,88 @@ class EditIncomeCategoryView(View):
             'template': render(
                 self.request, 'budgme/popovers/in_cat_success.html'),
         })
+
+
+@method_decorator(AJAX_DECORATORS, name='get')
+class AJAXRenderer(View):
+    def __init__(self):
+        """Any content passed in response must be a
+        list of tuple(selector, content)"""
+        self.replace_content = None
+        self.main_content = None
+        self.append_content = None
+        self.prepend_content = None
+
+        self.response = {
+            'fragments': {
+                # 'replace element with this content'
+                # self.replace_content goes here
+            },
+            'inner-fragments': {
+                # 'replace inner content'
+                # self.main_content goes here
+            },
+            'append-fragments': {
+                # 'append this content'
+                # self.append_content goes here
+            },
+            'prepend-fragments': {
+                # 'prepend this content'
+                # self.prepend_content goes here
+            },
+        }
+
+    def get(self, request, *args, **kwargs):
+        self.render_page()
+        return self.response
+
+    def post(self, request, *args, **kwargs):
+        self._update_response()
+        return self.response
+
+    def render_page(self):
+        try:
+            method = getattr(self, self.request.resolver_match.url_name)
+            method()
+        except AttributeError:
+            self.page_404()
+        self._update_response()
+
+    def page_404(self):
+        self.main_content = [
+            ('#main-container', render(self.request, 'budgme/404.html')),
+        ]
+
+    def ajax_home(self):
+        self.main_content = [
+            ('#main-container', render(self.request, 'budgme/home.html')),
+        ]
+
+    def _update_response(self):
+        if self.replace_content:
+            for selector, html in self.replace_content:
+                self.response['fragments'].update({
+                    selector: str(html.content).replace('\\n', '')[2:-1],
+                })
+
+        if self.main_content:
+            for selector, html in self.main_content:
+                self.response['inner-fragments'].update({
+                    selector: str(html.content).replace('\\n', '')[2:-1],
+                })
+
+        if self.append_content:
+            for selector, html in self.append_content:
+                self.response['append-fragments'].update({
+                    selector: str(html.content).replace('\\n', '')[2:-1],
+                })
+
+        if self.prepend_content:
+            for selector, html in self.prepend_content:
+                self.response['prepend-fragments'].update({
+                    selector: str(html.content).replace('\\n', '')[2:-1],
+                })
+
+
+class MasterPage(TemplateView):
+    template_name = 'budgme/master.html'

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,8 +24,6 @@
       <![endif]-->
   </head>
   <body class="container">
-{#  {% include 'budgme/menu/authorized_menu.html' %}#}
-{#  {% include 'budgme/menu/test_menu.html' %}#}
 
       {% if user.is_authenticated %}
           {% include 'budgme/menu/authorized_menu.html' %}
@@ -32,9 +31,17 @@
           {% include 'budgme/menu/unauthorized_menu.html' %}
       {% endif %}
 
-      {% block content %}{% endblock %}
+      <div id="loader-animation">
+          <img src="{% static 'budgme/wedges.gif' %}">
+      </div>
+
+      <div id="main-container">
+          {% block content %}{% endblock %}
+      </div>
 
       {% include 'budgme/scripts.html' %}
-      {% block scripts %}{% endblock %}
+      <div id="scripts">
+        {% block scripts %}{% endblock %}
+      </div>
   </body>
 </html>

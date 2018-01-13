@@ -28,8 +28,6 @@ from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.Home.as_view(), name='home'),
-
     url(r'^login', login,
         {
             'template_name': 'budgme/login.html',
@@ -57,12 +55,20 @@ urlpatterns = [
         {
             'template_name': 'app/password_change_done.html',
         }, name='password_change_done'),
-    url(r'^profile$', views.ProfileView.as_view(), name='profile'),
-    url(r'^income-categories$', views.IncomeCategories.as_view(), name='income_categories'),
 
-    # ajax urls
-    url(r'^add-in-category$', views.add_income_category, name='add_in_cat'),
-    url(r'^edit-in-cat$', views.EditIncomeCategoryView.as_view(), name='edit_in_cat'),
+    # home page
+    url(r'^$', views.MasterPage.as_view(), name='home'),
+    url(r'^ajax/$', views.AJAXRenderer.as_view(), name='ajax_home'),
+
+    # profile page
+    url(r'^profile$', views.MasterPage.as_view(), name='profile'),
+    url(r'^ajax/profile$', views.AJAXRenderer.as_view(), name='ajax_profile'),
+
+    # income categories page
+    url(r'^income-categories$', views.MasterPage.as_view(), name='income_categories'),
+    url(r'^ajax/income-categories$', views.AJAXRenderer.as_view(), name='ajax_income_categories'),
+    url(r'^ajax/add-in-category$', views.add_income_category, name='ajax_add_in_cat'),
+    url(r'^ajax/edit-in-cat$', views.EditIncomeCategoryView.as_view(), name='ajax_edit_in_cat'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
