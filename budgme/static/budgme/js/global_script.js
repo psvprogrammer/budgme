@@ -6,10 +6,23 @@ $(document).ready(function() {
     // $("div.fadeout-slowly-3").fadeOut(3000);
     $("span.fadeout-slowly-3").css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0.0},3000);
 
-    $(this).delay(1000).queue(function() {
+    // load with delay 1 sec
+    // $(this).delay(1000).queue(function() {
+    //     ajaxGet('/ajax' + window.location.pathname, {}, function (content) {
+    //         $("#loader-animation").hide();
+    //     });
+    //     $(this).dequeue();
+    // });
+
+    // direct method load
+    try{
         ajaxGet('/ajax' + window.location.pathname, {}, function (content) {
-            $("#loader-animation").hide();
+            // $("#loader-animation").hide();
+            $("#loader-animation").fadeOut(1000);
         });
-        $(this).dequeue();
-    });
+    }
+    finally {
+        $("#loader-animation").fadeOut(1000);
+    }
+
 });
