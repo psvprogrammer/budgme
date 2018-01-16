@@ -32,16 +32,17 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
 from django.utils.translation import activate, get_language_info
-# from django_ajax.mixin import AJAXMixin
-from django_ajax.decorators import ajax
+from django_ajax.mixin import AJAXMixin
+# from django_ajax.decorators import ajax
 
 from budgme.models import Budget, IncomeCategory, Profile
+from budgme.forms import CustomAuthenticationForm, CustomPasswordChangeForm
 from budgme import forms
 
-AJAX_DECORATORS = [
-    login_required,
-    ajax,
-]
+# AJAX_DECORATORS = [
+#     login_required,
+#     ajax,
+# ]
 
 
 def get_current_budget(request):
@@ -57,7 +58,7 @@ def get_current_budget(request):
     return budget
 
 
-@method_decorator(AJAX_DECORATORS, name='check_cookie')
+# @method_decorator(AJAX_DECORATORS, name='check_cookie')
 class CheckCookieMixin:
     def check_cookie(self, request, *args, **kwargs):
         pass
@@ -75,17 +76,17 @@ def profile(request):
     return render(request, 'budgme/profile.html')
 
 
-class ProfileView(CheckCookieMixin, View):
-    """docstring for Profile."""
-    def get(self, request, *args, **kwargs):
-        return render(request, 'budgme/profile.html')
-
-    def post(self, request, *args, **kwargs):
-        context = {
-            'test_message': _('Changes saved successfuly!'),
-        }
-        print(request.POST)
-        return render(request, 'budgme/profile.html', context)
+# class ProfileView(CheckCookieMixin, View):
+#     """docstring for Profile."""
+#     def get(self, request, *args, **kwargs):
+#         return render(request, 'budgme/profile.html')
+#
+#     def post(self, request, *args, **kwargs):
+#         context = {
+#             'test_message': _('Changes saved successfuly!'),
+#         }
+#         print(request.POST)
+#         return render(request, 'budgme/profile.html', context)
 
 
 class IncomeCategories(LoginRequiredMixin, ListView):
@@ -96,13 +97,13 @@ class IncomeCategories(LoginRequiredMixin, ListView):
         budget = get_current_budget(self.request)
         return IncomeCategory.objects.filter(budget=budget)
 
-@ajax
-@login_required
-def add_income_category(request):
-    pass
+# @ajax
+# @login_required
+# def add_income_category(request):
+#     pass
 
 
-@method_decorator(AJAX_DECORATORS, name='post')
+# @method_decorator(AJAX_DECORATORS, name='post')
 class EditIncomeCategoryView(View):
     def __init__(self):
         self.result = {}
@@ -168,8 +169,12 @@ class EditIncomeCategoryView(View):
         })
 
 
-@method_decorator(AJAX_DECORATORS, name='get')
-class AJAXRenderer(View):
+class MasterPage(TemplateView):
+    template_name = 'budgme/master.html'
+
+
+# @method_decorator(AJAX_DECORATORS, name='get')
+class AJAXRenderer(AJAXMixin, LoginRequiredMixin, View):
     def __init__(self):
         """Any content passed in response must be a
         list of tuple(selector, content)"""
@@ -202,7 +207,7 @@ class AJAXRenderer(View):
         return self.response
 
     def post(self, request, *args, **kwargs):
-        self._update_response()
+        self.render_page()
         return self.response
 
     def render_page(self):
@@ -222,6 +227,27 @@ class AJAXRenderer(View):
         self.main_content = [
             ('#main-container', render(self.request, 'budgme/home.html')),
         ]
+
+    def ajax_income_categories(self):
+
+        def get_queryset(request):
+            budget = get_current_budget(request)
+            return IncomeCategory.objects.filter(budget=budget)
+
+        context = {
+            'object_list': get_queryset(self.request),
+        }
+        self.main_content = [
+            ('#main-container', render(self.request,
+                                       'budgme/income/in_cat.html', context)),
+        ]
+        self.append_content = [
+            ('#scripts', render(self.request,
+                                'budgme/income/in_cat_scripts.html')),
+        ]
+
+    def ajax_edit_in_cat(self):
+        pass
 
     def _update_response(self):
         if self.replace_content:
@@ -248,6 +274,3 @@ class AJAXRenderer(View):
                     selector: str(html.content).replace('\\n', '')[2:-1],
                 })
 
-
-class MasterPage(TemplateView):
-    template_name = 'budgme/master.html'

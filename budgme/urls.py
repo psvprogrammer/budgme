@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns, static
 from django.contrib import admin
+from django.views.generic.base import RedirectView
 
 from django.contrib.auth.views import login, logout,\
     password_change, password_change_done
@@ -28,7 +29,7 @@ from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^login', login,
+    url(r'^login$', login,
         {
             'template_name': 'budgme/login.html',
             'authentication_form': CustomAuthenticationForm,
@@ -40,7 +41,7 @@ urlpatterns = [
         }, name='login'),
     url(r'^logout$', logout,
         {
-            'next_page': '/'
+            'next_page': '/login'
         }, name='logout'),
     url(r'^password_change/$', password_change,
         {
@@ -58,6 +59,7 @@ urlpatterns = [
 
     # home page
     url(r'^$', views.MasterPage.as_view(), name='home'),
+    url(r'^home$', views.MasterPage.as_view(), name='index'),
     url(r'^ajax/$', views.AJAXRenderer.as_view(), name='ajax_home'),
 
     # profile page
@@ -67,8 +69,9 @@ urlpatterns = [
     # income categories page
     url(r'^income-categories$', views.MasterPage.as_view(), name='income_categories'),
     url(r'^ajax/income-categories$', views.AJAXRenderer.as_view(), name='ajax_income_categories'),
-    url(r'^ajax/add-in-category$', views.add_income_category, name='ajax_add_in_cat'),
-    url(r'^ajax/edit-in-cat$', views.EditIncomeCategoryView.as_view(), name='ajax_edit_in_cat'),
+    url(r'^ajax/add-in-category$', views.AJAXRenderer.as_view(), name='ajax_add_in_cat'),
+    url(r'^ajax/edit-in-cat$', views.AJAXRenderer.as_view(), name='ajax_edit_in_cat'),
+    # url(r'^.*$', RedirectView.as_view(url='/', permanent=False), name='index'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

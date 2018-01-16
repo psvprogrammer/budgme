@@ -1,11 +1,9 @@
-{% extends "budgme/master.html" %}
 {% load i18n %}
 {% load staticfiles %}
 
-{% block content %}
 <div class="container">
     <div class="col-xs-12">
-    <h1 class="text-center">Income categories</h1>
+    <h1 class="text-center">Income source categories</h1>
     {% include 'budgme/income/in_cat_table.html' %}
     </div>
     <div class="col-xs-12 text-right">
@@ -13,8 +11,3 @@
         <a href="" id="btn-cancel-new-in-cat" class="btn btn-warning">Cancel</a>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-    <script src="{% static 'budgme/js/in_cat.js' %}"></script>
-{% endblock %}

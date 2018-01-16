@@ -7,7 +7,7 @@
     <nav class="navbar navbar-default" style="margin: 0px;">
         <div class="navbar-header">
             <div class="btn-group-justified hidden-lg hidden-md hidden-sm" role="group">
-                <a href="/" class="btn btn-inverse logo-style">
+                <a href="{% url 'home' %}" class="btn btn-inverse logo-style" data-load="ajax">
                     <img src="{% static 'budgme/budgme_logo_big.png' %}">
                 </a>
                 <a href="/add-income" class="btn btn-primary btn-rectangle">
@@ -79,7 +79,8 @@
                               <!-- -->
                           </a>
                           <a href="{% url 'income_categories' %}" class="btn btn-primary btn-link-categories btn-link-categories-left"
-                          data-toggle="tooltip" data-placement="left" title="{% trans 'income categories' %}">
+                             data-toggle="tooltip" data-placement="left"
+                             data-load="ajax" title="{% trans 'income categories' %}">
                               <span class="glyphicon glyphicon-cog gly-spin"></span>
                           </a>
                       </div>
@@ -112,7 +113,8 @@
                     <div class="col-12 col-sm-3 col-xl-2" style="text-align: left;"><!-- FIRST DIV "Budgets" -->
                         <div class="row no-padding">
                           <div class="btn-group-justified" role="group" style="height: 71px;">
-                              <a href="/" class="btn btn-inverse logo-style hidden-sm" style="width: 25%;">
+                              <a href="{% url 'home' %}" class="btn btn-inverse logo-style hidden-sm"
+                                 data-load="ajax" style="width: 25%;">
                                   <img src="{% static 'budgme/budgme_logo_big.png' %}">
                               </a>
                               <a href="/budgets" class="btn btn-primary btn-rectangle" style="font-size: large; width: 50%;">{% trans "Budgets" %}
@@ -143,8 +145,10 @@
                                   <span class="badge">3</span>
                                   <!-- -->
                               </a>
-                              <a href="{% url 'income_categories' %}" class="btn btn-primary btn-link-categories btn-link-categories-left hidden-sm"
-                              data-toggle="tooltip" data-placement="left" title="{% trans 'income categories' %}">
+                              <a href="{% url 'income_categories' %}"
+                                 class="btn btn-primary btn-link-categories btn-link-categories-left hidden-sm"
+                                 data-toggle="tooltip" data-placement="left" data-load="ajax"
+                                 title="{% trans 'income categories' %}">
                                   <span class="glyphicon glyphicon-cog gly-spin"></span>
                               </a>
                           </div>
