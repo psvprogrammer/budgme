@@ -116,7 +116,7 @@ function save_in_cat(id) {
             name: new_name,
             description: new_descr,
         };
-        ajaxPost('/edit-in-cat', data, function (content) {
+        ajaxPost('ajax/edit-in-cat', data, function (content) {
             //on success
             test = content;
             row = $("#in_cat-id_" + id);
