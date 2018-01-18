@@ -1,25 +1,27 @@
-<tr id="in_cat-id_{{ income_category.id }}"
+{% with id=income_category.id name=income_category.name description=income_category.description %}
+<tr id="in_cat-id_{{ id }}"
     data-container="body" data-toggle="popover" data-placement="bottom">
     <td class="field">
-        <p id="name-id_{{ income_category.id }}">{{ income_category.name }}</p>
-        <input id="new_name-id_{{ income_category.id }}"
+        <p id="name-id_{{ id }}">{{ name }}</p>
+        <input id="new_name-id_{{ id }}"
                class="btn-group-justified btn-edit_in-cat" type="text"
                placeholder=" name" name="name" style="display: none;"
-               value="{{ income_category.name }}">
+               value="{{ name }}">
     </td>
     <td class="field">
-        <p id="description-id_{{ income_category.id }}">{{ income_category.description }}</p>
+        <p id="description-id_{{ id }}">{{ description }}</p>
         <input id="new_description-id_{{ income_category.id }}"
                class="btn-group-justified btn-edit_in-cat" type="text"
-               placeholder=" descripton" name="descripton" style="display: none;"
-               value="{{ income_category.description }}">
+               placeholder=" description" name="description" style="display: none;"
+               value="{{ description }}">
     </td>
     <td class="buttons text-right">
-        <button type="button" id="btn-edit-in_cat-id_{{ income_category.id }}"
+        <button type="button" id="btn-edit-in_cat-id_{{ id }}"
            class="btn btn-primary table-btn btn-edit_in-cat" style="display: none;">Save</button>
-        <button type="button" id="btn-cancel-in_cat-id_{{ income_category.id }}"
+        <button type="button" id="btn-cancel-in_cat-id_{{ id }}"
            class="btn btn-warning table-btn" style="display: none;">Cancel</button>
-        <button type="button" id="btn-del-in_cat-id_{{ income_category.id }}"
-           class="btn btn-danger table-btn">Delete</button>
+        <button type="button" id="btn-del-in_cat-id_{{ id }}"
+           class="btn btn-danger table-btn" style="display: none;">Delete</button>
     </td>
 </tr>
+{% endwith %}

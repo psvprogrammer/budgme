@@ -3,11 +3,10 @@
 
 <div class="container">
     <div class="col-xs-12">
-    <h1 class="text-center">Income source categories</h1>
+    <h1 class="text-center">{% trans 'Income sources' %}</h1>
     {% include 'budgme/income/in_cat_table.html' %}
     </div>
     <div class="col-xs-12 text-right">
-        <a href="" id="btn-show-new-in-cat-row" class="btn btn-primary">Add new</a>
-        <a href="" id="btn-cancel-new-in-cat" class="btn btn-warning">Cancel</a>
+        <button type="button" id="btn-show-new-in-cat-row" class="btn btn-primary">Add new</button>
     </div>
 </div>

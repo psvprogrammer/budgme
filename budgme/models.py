@@ -80,7 +80,7 @@ class IncomeCategory(models.Model):
                             help_text=_('Set the name of the category '
                                         '(should be unique in target budget)'),
                             max_length=120)
-    description = models.CharField(_('Description'), null=True, blank=True,
+    description = models.CharField(_('Description'), null=False, blank=True,
                                    help_text=_('Describe what is for this '
                                                'income category'),
                                    max_length=254, default='')

@@ -69,8 +69,9 @@ urlpatterns = [
     # income categories page
     url(r'^income-categories$', views.MasterPage.as_view(), name='income_categories'),
     url(r'^ajax/income-categories$', views.AJAXRenderer.as_view(), name='ajax_income_categories'),
-    url(r'^ajax/add-in-category$', views.AJAXRenderer.as_view(), name='ajax_add_in_cat'),
+    url(r'^ajax/add-in-cat$', views.AJAXRenderer.as_view(), name='ajax_add_in_cat'),
     url(r'^ajax/edit-in-cat$', views.AJAXRenderer.as_view(), name='ajax_edit_in_cat'),
+    url(r'^ajax/del-in-cat$', views.AJAXRenderer.as_view(), name='ajax_del_in_cat'),
     # url(r'^.*$', RedirectView.as_view(url='/', permanent=False), name='index'),
 ]
 

@@ -1,8 +1,32 @@
 $(document).ready(function(){
     $("#table-new-in_cat").hide();
-    $("#btn-cancel-new-in-cat").hide();
-    // $('[data-toggle="popover"]').popover({delay: { hide: 3000 }});
 
+    handle_table_td_clicks();
+});
+
+$("#btn-show-new-in-cat-row").click(function(event){
+    event.preventDefault();
+    $(this).hide();
+    $("#table-new-in_cat").show();
+    $("#btn-cancel-new-in-cat").show();
+});
+
+$("#btn-cancel-new-in-cat").click(function(event){
+    event.preventDefault();
+    $("#table-new-in_cat").hide();
+    $(this).hide();
+    $("#btn-show-new-in-cat-row").show();
+});
+
+// add new category ajaxPost
+$("#btn-add-new-in_cat").click(function(event){
+    event.preventDefault();
+    add_in_cat();
+});
+
+/* table td click events: Save | Cancel | Delete buttons
+/* and "Enter" key pres event equals to 'Save' button click */
+function handle_table_td_clicks() {
     $("#table-in_cat>tbody>tr>td").each(function () {
 
         $(this).on('click', function (event) {
@@ -12,6 +36,9 @@ $(document).ready(function(){
             if (event.target.tagName == 'BUTTON'){
                 if (event.target.innerText == 'Save'){
                     save_in_cat(id);
+                }
+                else if(event.target.innerText == 'Delete') {
+                    delete_in_cat(id);
                 }
                 focusout_row(id, row_elem, event);
             }
@@ -29,7 +56,7 @@ $(document).ready(function(){
         });
     });
 
-    // bind enter key press with 'save' button click
+    // bind "Enter" key press with 'Save' button click
     $("#table-in_cat>tbody>tr>td.field").each(function () {
         $(this).on('keypress', function (e) {
             if(e.which === 13){
@@ -37,17 +64,14 @@ $(document).ready(function(){
                 $("#btn-edit-in_cat-id_" + id).click();
             }
         });
-   });
-});
+    });
+}
 
 function focusin_row(id, row_elem, event) {
     if (!row_elem){
         row_elem = $('#in_cat-id_'+id);
     }
 
-    // row_elem.find('td.field').each(function () {
-    //     $(this).prop('contenteditable', true);
-    // });
     row_elem.find('td.field').each(function () {
         p = $(this).find('p');
         input = $(this).find('input');
@@ -59,6 +83,7 @@ function focusin_row(id, row_elem, event) {
 
     $("#btn-edit-in_cat-id_"+id).show();
     $("#btn-cancel-in_cat-id_"+id).show();
+    $("#btn-del-in_cat-id_"+id).show();
     if (event){
         test = event.target;
 
@@ -81,9 +106,6 @@ function focusout_row(id, row_elem, event) {
         row_elem = $('#in_cat-id_'+id);
     }
 
-    // row_elem.find('td.field').each(function () {
-    //     $(this).prop('contenteditable', false);
-    // });
     row_elem.find('td.field').each(function () {
         p = $(this).find('p');
         input = $(this).find('input');
@@ -95,6 +117,7 @@ function focusout_row(id, row_elem, event) {
 
     $("#btn-edit-in_cat-id_"+id).hide();
     $("#btn-cancel-in_cat-id_"+id).hide();
+    $("#btn-del-in_cat-id_"+id).hide();
     row_elem.focusout();
     if (event){
         event.stopPropagation();
@@ -118,17 +141,14 @@ function save_in_cat(id) {
         };
         ajaxPost('ajax/edit-in-cat', data, function (content) {
             //on success
-            test = content;
             row = $("#in_cat-id_" + id);
             row.popover({
-                // selector: "#in_cat-id_" + id,
                 delay: { hide: 3000 },
                 title: content.title,
                 content: content.content,
                 template: content.template,
                 trigger: 'click|focus',
             });
-            console.log('ajaxPost success! id: ' + id);
 
             row.popover('show');
             row.popover('toggle');
@@ -150,24 +170,65 @@ function save_in_cat(id) {
     }
 }
 
-$("a#btn-show-new-in-cat-row").click(function(event){
-    event.preventDefault();
-    $(this).hide();
-    $("#table-new-in_cat").show();
-    // $("#btn-cancel-new-in-cat").show();
-});
-
-$("#btn-cancel-new-in-cat").click(function(event){
-    event.preventDefault();
-    $("#table-new-in_cat").hide();
-    $("#btn-cancel-new-in-cat").hide();
-    $("#btn-show-new-in-cat-row").show();
-});
-
-$("a#btn-add-new-in_cat").click(function(event){
-    event.preventDefault();
+function add_in_cat() {
     //post to ajax and on success
-    $("#table-new-in_cat").hide();
-    $("#btn-cancel-new-in-cat").hide();
-    $("#btn-show-new-in-cat-row").show();
-});
+    name = $("input#new-in_cat-name").prop('value');
+    description = $("input#new-in_cat-description").prop('value');
+    data = {
+        id: '0', // just for correct query
+        name: name,
+        description: description,
+    };
+    ajaxPost('ajax/add-in-cat', data, function (content) {
+        //on success
+        if (content.success){
+            row = $('table#table-in_cat>tbody').find('tr').last();
+
+            $("#table-new-in_cat").hide();
+            $("#btn-cancel-new-in-cat").hide();
+            $("#btn-show-new-in-cat-row").show();
+        }
+        else{
+            row = $("#table-new-in_cat");
+        }
+        show_popover(row, content, $("#btn-add-new-in_cat"));
+        handle_table_td_clicks();
+    });
+}
+
+function delete_in_cat(id) {
+    data = {
+        id: id,
+    };
+    ajaxPost('ajax/del-in-cat', data, function (content) {
+        //on success
+    });
+}
+
+/*
+* This function init and show default popover for element
+* and freeze elem to prevent DB spam.
+* Default delay is 3 sec.
+* */
+function show_popover(elem, content, freeze_elem) {
+    if (!freeze_elem){
+        freeze_elem = elem;
+    }
+    elem.popover({
+        delay: { hide: 3000 },
+        title: content.title,
+        content: content.content,
+        template: content.template,
+        trigger: 'click|focus',
+    });
+
+    elem.popover('show');
+    elem.popover('toggle');
+    freeze_elem.prop('disabled', true);
+
+    $(this).delay(3000).queue(function() {
+        row.popover('destroy');
+        freeze_elem.prop('disabled', false);
+        $(this).dequeue();
+    });
+}

@@ -47,7 +47,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
                                     }))
 
 
-class EditIncomeCategoryForm(forms.ModelForm):
+class IncomeCategoryForm(forms.ModelForm):
     class Meta:
         model = models.IncomeCategory
         fields = [
