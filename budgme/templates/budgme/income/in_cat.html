@@ -4,7 +4,11 @@
 <div class="container">
     <div class="col-xs-12">
     <h1 class="text-center">{% trans 'Income sources' %}</h1>
-    {% include 'budgme/income/in_cat_table.html' %}
+    {% if grid_size == 'xs' %}
+        {% include 'budgme/income/xs_in_cat_table.html' %}
+    {% else %}
+        {% include 'budgme/income/in_cat_table.html' %}
+    {% endif %}
     </div>
     <div class="col-xs-12 text-right">
         <button type="button" id="btn-show-new-in-cat-row" class="btn btn-primary">Add new</button>

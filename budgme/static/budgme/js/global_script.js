@@ -35,7 +35,7 @@ function getAjaxPage(url) {
     $("#loader-animation").show();
     $("#main-container").hide();
     try{
-        ajaxGet('/ajax' + url, {}, function (content) {
+        ajaxGet('/ajax' + url, {'width': $(document).width()}, function (content) {
             $("#main-container").fadeIn(1000);
             $("#loader-animation").fadeOut(1000);
         });

@@ -1,6 +1,5 @@
 $(document).ready(function(){
     $("#table-new-in_cat").hide();
-
     handle_table_td_clicks();
 });
 
@@ -31,8 +30,13 @@ function handle_table_td_clicks() {
 
         $(this).on('click', function (event) {
             row_elem = $(this).parent();
-            id = row_elem.prop('id').replace('in_cat-id_', '');
 
+            // xs row template (action buttons in separate row)
+            if (!row_elem.prop('id')){
+                row_elem = $(this).parent().prev();
+            }
+
+            id = row_elem.prop('id').replace('in_cat-id_', '');
             if (event.target.tagName == 'BUTTON'){
                 if (event.target.innerText == 'Save'){
                     save_in_cat(id);

@@ -1,7 +1,7 @@
 {% with id=income_category.id name=income_category.name description=income_category.description %}
 <tr id="in_cat-id_{{ id }}"
     data-container="body" data-toggle="popover" data-placement="bottom">
-    <td class="field">
+    <td class="field" colspan="2">
         <p id="name-id_{{ id }}">{{ name }}</p>
         <input id="new_name-id_{{ id }}"
                class="btn-group-justified btn-edit_in-cat" type="text"
@@ -15,7 +15,9 @@
                placeholder=" description" name="description" style="display: none;"
                value="{{ description }}">
     </td>
-    <td class="buttons text-right">
+</tr>
+<tr>
+    <td class="buttons text-center" colspan="3">
         <button type="button" id="btn-edit-in_cat-id_{{ id }}"
            class="btn btn-primary table-btn" style="display: none;">Save</button>
         <button type="button" id="btn-cancel-in_cat-id_{{ id }}"

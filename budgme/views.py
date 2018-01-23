@@ -54,6 +54,36 @@ def get_current_budget(request):
     return budget
 
 
+# Bootstrap sizes according to it's grid system
+XS_SIZE = 768
+MD_SIZE = 992
+LG_SIZE = 1200
+
+
+def get_grid_size(request):
+    """This method parses client size window based on
+    bootstrap grid system and returns one of the string:
+    'xs' - if width < 768px
+    'sm' - if width >= 768px
+    'md' - if width >= 992px
+    'lg' - if width >= 1200px
+    default is 'lg'
+    """
+    try:
+        width = int(request.GET.get('width'))
+    except:
+        return 'lg'
+    else:
+        if width >= LG_SIZE:
+            return 'lg'
+        elif width >= MD_SIZE:
+            return 'md'
+        elif width >= XS_SIZE:
+            return 'sm'
+        else:
+            return 'xs'
+
+
 def profile(request):
     return render(request, 'budgme/profile.html')
 
@@ -105,6 +135,7 @@ class IncomeCategories(BaseAjaxRenderer):
 
         context = {
             'object_list': get_queryset(self.request),
+            'grid_size': get_grid_size(self.request),
         }
         self.main_content = [
             ('#main-container', render(self.request,
