@@ -1,0 +1,26 @@
+<select id="budget-selector" class="selectpicker show-menu-arrow show-tick"
+        data-style="btn-warning btn-rectangle" data-width="fit">
+    <option value="{{ current_budget.name }}"
+            data-content="<i class='fa {{ current_budget.icon }} fa-fw' aria-hidden='true'></i>&nbsp;{{ current_budget.name }}"></option>
+
+    {# test shared budgets #}
+    <option data-content="<i class='fa fa-home fa-fw' aria-hidden='true'></i>&nbsp; Test shared &nbsp;<span class='label label-info'><i class='fa fa-share-alt' aria-hidden='true'></i>&nbsp; shared</span>"
+            value="Test shared"></option>
+
+    {# own budgets #}
+    {% for budget in budget_list %}
+        <option value="{{ budget.name }}"
+            data-content="<i class='fa {{ budget.icon }} fa-fw' aria-hidden='true'></i>&nbsp;{{ budget.name }}"></option>
+    {% endfor %}
+
+    {# shared budgets #}
+    {% for budget_access in shared_budgets %}
+        {% with budget=budget_access.budget %}
+        <option value="{{ budget.name }}"
+                data-content="<i class='fa {{ budget.icon }} fa-fw' aria-hidden='true'></i>&nbsp; {{ budget.name }} &nbsp;
+                <span class='label label-info'>
+                <i class='fa fa-share-alt' aria-hidden='true'></i>&nbsp; shared
+                </span>"></option>
+        {% endwith %}
+    {% endfor %}
+</select>

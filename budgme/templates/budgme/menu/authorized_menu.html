@@ -51,11 +51,6 @@
                   <div class="row">
                     <div class="col-xs-12 no-padding one-line">
                       <div class="btn-group-justified" role="group">
-                          <!-- if user have more than one budget -->
-                          <a class="btn btn-default btn-rectangle" data-toggle="collapse" data-target="#choose-budget-div" style="width: 40%;">
-                            <span class="glyphicon glyphicon-transfer" style="font-size: 20px;"></span>
-                          </a>
-                          <!-- -->
                           <a href="/budgets" class="btn btn-primary btn-rectangle"
                           style="font-size: small; width: 60%;">{% trans "Budgets" %}
                           <!-- if user have income budgets (not approved) > 0 -->
@@ -122,11 +117,6 @@
                               <span class="badge">1</span>
                               <!-- -->
                               </a>
-                              <!-- if user have more than one budget -->
-                              <a class="btn btn-default btn-rectangle" data-toggle="collapse" data-target="#choose-budget-div" style="width: 25%;">
-                                <span class="glyphicon glyphicon-transfer" style="font-size: 20px;"></span>
-                              </a>
-                              <!-- -->
                           </div>
                         </div>
                     </div><!-- #budgets-div -->
@@ -210,29 +200,42 @@
 <!-- -->
 
 <!-- if user have more than 3 active budgets -->
-<div id="choose-budget-div" class="collapse container">
-    <div class="btn-group btn-block" role="group">
-      <button type="button" class="btn btn-info dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Primary <span class="caret"></span></button>
-      <ul class="dropdown-menu btn-block">
-        <!-- for each budget -->
-        <li><a href="#">Action</a></li>
-        <!-- -->
-        <li><a href="#">Another action</a></li>
-        <li><a href="#">Something else here</a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#">Separated link</a></li>
-      </ul>
-    </div>
-</div>
+{#<div id="choose-budget-div" class="collapse container">#}
+{#    <div class="btn-group btn-block" role="group">#}
+{#      <button type="button" class="btn btn-info dropdown-toggle btn-block" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Primary <span class="caret"></span></button>#}
+{#      <ul class="dropdown-menu btn-block">#}
+{#        <!-- for each budget -->#}
+{#        <li><a href="#">Action</a></li>#}
+{#        <!-- -->#}
+{#        <li><a href="#">Another action</a></li>#}
+{#        <li><a href="#">Something else here</a></li>#}
+{#        <li role="separator" class="divider"></li>#}
+{#        <li><a href="#">Separated link</a></li>#}
+{#      </ul>#}
+{#    </div>#}
+{#</div>#}
 <!-- -->
 
-<div id="change-period-div" class="collapse container">
-    <div class="btn-group-justified" role="group">
-        <a href="#" class="active btn btn-info btn-rectangle">Month</a>
-        <a href="#" class="btn btn-info btn-rectangle">Week</a>
-        <a href="#" class="btn btn-info btn-rectangle">Day</a>
-        <a href="#" class="btn btn-info btn-rectangle">Hour</a>
-        <a href="#" class="btn btn-info btn-rectangle">Custom</a>
+<!-- choose active period for data source measures -->
+{#<div id="change-period-div" class="collapse container">#}
+{#    <div class="btn-group-justified" role="group">#}
+{#        <a href="#" class="active btn btn-info btn-rectangle">Month</a>#}
+{#        <a href="#" class="btn btn-info btn-rectangle">Week</a>#}
+{#        <a href="#" class="btn btn-info btn-rectangle">Day</a>#}
+{#        <a href="#" class="btn btn-info btn-rectangle">Hour</a>#}
+{#        <a href="#" class="btn btn-info btn-rectangle">Custom</a>#}
+{#    </div>#}
+{#</div>#}
+
+    {#      xl-budget_menu     #}
+    <div id="budget_menu" class="hidden-xs">
+        <div class="row">
+            <span class="label label-warning budget-seletor">Current budget:</span>
+            <div class="col-xl-3 col-sm-6 col-6">
+                <div class="form-group">
+                    {% include 'budgme/budget_selector.html' %}
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </div>

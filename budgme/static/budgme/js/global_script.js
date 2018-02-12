@@ -1,6 +1,9 @@
 $(document).ready(function() {
+
     //===> tooltip init
     $('[data-toggle="tooltip"]').tooltip();
+
+    //===> ajax load data href click event
     $('[data-load="ajax"]').each(function () {
         $(this).click(function (event) {
             event.preventDefault();
@@ -9,13 +12,16 @@ $(document).ready(function() {
         })
     })
 
+    //===> init global budget select
+    init_budget_select_change();
+
     //===> profile page success message fadeOut (should be moved to profile page?)
     // $("div.fadeout-slowly-3").fadeOut(3000);
     $("span.fadeout-slowly-3").css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0.0},3000);
 
-    var exclude_ajax_urls  = [
-        '/login', '/logout', '/password_change/', '/password_change/done/',
-    ]
+    // var exclude_ajax_urls  = [
+    //     '/login', '/logout', '/password_change/', '/password_change/done/',
+    // ]
     // load with delay 1 sec
     // $(this).delay(1000).queue(function() {
     //     ajaxGet('/ajax' + window.location.pathname, {}, function (content) {
@@ -25,11 +31,21 @@ $(document).ready(function() {
     // });
 
     // direct method load
+    // if ($.inArray(window.location.pathname, exclude_ajax_urls) == -1){
+    //     getAjaxPage(window.location.pathname);
+    // }
+    load_page_content();
+});
+
+function load_page_content() {
+    exclude_ajax_urls  = [
+        '/login', '/logout', '/password_change/', '/password_change/done/',
+    ]
+    // direct method load
     if ($.inArray(window.location.pathname, exclude_ajax_urls) == -1){
         getAjaxPage(window.location.pathname);
     }
-    $("#loader-animation").fadeOut(1000);
-});
+}
 
 function getAjaxPage(url) {
     $("#loader-animation").show();
@@ -43,4 +59,53 @@ function getAjaxPage(url) {
     finally {
         $("#loader-animation").fadeOut(1000);
     }
+}
+
+function change_current_budget(value, callback) {
+    ajaxPost('/ajax/change_budget', {'budget': value}, function (content) {
+        // on success
+        if (callback){
+            callback();
+        }
+    });
+}
+
+/* This function removes all previous on select changed event handlers
+ * and run passed callback function */
+function init_budget_select_change(callback) {
+    $("#budget-selector").off('changed.bs.select');
+    $("#budget-selector").on('changed.bs.select', function (event, clickedIndex, newValue, oldValue) {
+        if (newValue){
+            change_current_budget(event.currentTarget.value, callback);
+            $(document).click();
+        }
+    });
+}
+
+/*
+* This function init and show default popover for element
+* and freeze elem to prevent DB spam.
+* Default delay is 3 sec.
+* */
+function show_popover(elem, content, freeze_elem) {
+    if (!freeze_elem){
+        freeze_elem = elem;
+    }
+    elem.popover({
+        delay: { hide: 3000 },
+        title: content.title,
+        content: content.content,
+        template: content.template,
+        trigger: 'click|focus',
+    });
+
+    elem.popover('show');
+    elem.popover('toggle');
+    freeze_elem.prop('disabled', true);
+
+    $(this).delay(3000).queue(function() {
+        row.popover('destroy');
+        freeze_elem.prop('disabled', false);
+        $(this).dequeue();
+    });
 }

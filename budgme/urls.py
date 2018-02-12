@@ -57,21 +57,25 @@ urlpatterns = [
             'template_name': 'app/password_change_done.html',
         }, name='password_change_done'),
 
-    # home page
+    # home pages
     url(r'^$', views.MasterPage.as_view(), name='home'),
     url(r'^home$', views.MasterPage.as_view(), name='index'),
     url(r'^ajax/$', views.AJAXRenderer.as_view(), name='ajax_home'),
 
-    # profile page
+    # profile pages
     url(r'^profile$', views.MasterPage.as_view(), name='profile'),
     url(r'^ajax/profile$', views.AJAXRenderer.as_view(), name='ajax_profile'),
 
-    # income categories page
+    # income category pages
     url(r'^income-categories$', views.MasterPage.as_view(), name='income_categories'),
     url(r'^ajax/income-categories$', views.AJAXRenderer.as_view(), name='ajax_income_categories'),
     url(r'^ajax/add-in-cat$', views.AJAXRenderer.as_view(), name='ajax_add_in_cat'),
     url(r'^ajax/edit-in-cat$', views.AJAXRenderer.as_view(), name='ajax_edit_in_cat'),
     url(r'^ajax/del-in-cat$', views.AJAXRenderer.as_view(), name='ajax_del_in_cat'),
+
+    # budget pages
+    url(r'^ajax/change_budget$', views.AJAXRenderer.as_view(), name='ajax_change_budget'),
+
     # url(r'^.*$', RedirectView.as_view(url='/', permanent=False), name='index'),
 ]
 

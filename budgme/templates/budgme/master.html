@@ -17,6 +17,18 @@
       <link rel="stylesheet" type="text/css" href="{% static 'budgme/css/bootstrap_circle_button.css' %}">
       <link rel="stylesheet" type="text/css" href="{% static 'budgme/vertical_tab_menu/vertical_tab_menu.css' %}">
 
+      <!-- for budget selector -->
+{#      <link rel="stylesheet" type="text/css" href="{% static 'budgme/budget_select/css/normalize.css' %}">#}
+{#      <link rel="stylesheet" type="text/css" href="{% static 'budgme/budget_select/css/cs-select.css' %}">#}
+{#      <link rel="stylesheet" type="text/css" href="{% static 'budgme/budget_select/css/cs-skin-underline.css' %}">#}
+{#      <link rel="stylesheet" type="text/css" href="{% static 'budgme/budget_select/css/cs-skin-slide.css' %}">#}
+
+      <!-- font-awesome -->
+      <link rel="stylesheet" type="text/css" href="{% static 'budgme/font-awesome-4.7.0/css/font-awesome.css' %}">
+
+      <!-- Bootstrap-select from: https://silviomoreto.github.io/bootstrap-select -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
       <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
       <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
       <!--[if lt IE 9]>
@@ -32,27 +44,7 @@
           {% include 'budgme/menu/unauthorized_menu.html' %}
       {% endif %}
 
-      <div id="loader-animation">
-{#          <img src="{% static 'budgme/wedges.gif' %}">#}
-          <div class="lds-css ng-scope" style="position: absolute; left: calc(50% - 85px);">
-              <div style="width:100%;height:100%" class="lds-wedges">
-                <div>
-                  <div>
-                    <div></div>
-                  </div>
-                  <div>
-                    <div></div>
-                  </div>
-                  <div>
-                    <div></div>
-                  </div>
-                  <div>
-                    <div></div>
-                  </div>
-                </div>
-              </div>
-          </div>
-      </div>
+      {% include 'budgme/loader-animation.html' %}
 
       <div id="main-container">
           {% block content %}{% endblock %}
@@ -61,6 +53,10 @@
       <div id="scripts">
         {% include 'budgme/scripts.html' %}
         {% block scripts %}{% endblock %}
+      </div>
+      <div id="page_script">
+          <!-- this is mainly only for one script that related to the current page only
+          (should be replaced with every page loaded through django-ajax) -->
       </div>
   </body>
 </html>

@@ -31,16 +31,23 @@ def user_post_save_profile_creation(sender, instance, created,
     """Automatically creating profile for all newly created users.
     All users has to have at least one budget. Here we creating its
     first 'default' user budget.
+    Plus adding this 'default' budget to BudgetAccess table
+    with our user as target_user with full access
     """
-    if created:
-        default_budget = Budget(
-            owner=instance, name='default',
-            description=_('This is your first automaticatlly created '
-                          'default budget')
-        )
-        default_budget.save()
-        profile = Profile(user=instance, default_budget=default_budget)
-        profile.save()
+    if not created:
+        return
+
+    # creating default budget
+    default_budget = Budget(
+        owner=instance, name='default',
+        description=_('This is your first automaticatlly created '
+                      'default budget')
+    )
+    default_budget.save()
+
+    # creating user profile
+    profile = Profile(user=instance, default_budget=default_budget)
+    profile.save()
 
 
 post_save.connect(user_post_save_profile_creation, sender=User)
@@ -61,6 +68,11 @@ class Budget(models.Model):
     description = models.CharField(_('Description'), null=True, blank=True,
                                    help_text=_('Describe the purposes '
                                    'of this budget'), max_length=254)
+    icon = models.CharField(_('Set icon for your budget'),
+                            default='fa-money', blank=True, max_length=100)
+
+    def get_balance(self, period):
+        return str(period)
 
     def __str__(self):
         return str(format_lazy('{name} (owner: {owner})',
@@ -323,30 +335,30 @@ class BudgetRuleSet(models.Model):
         verbose_name = _('budget rule set')
         verbose_name_plural = _('budget rule sets')
 
-    income_read = models.BooleanField(_('Can read incomes'))
-    income_write = models.BooleanField(_('Can change incomes'))
-    income_add = models.BooleanField(_('Can add new incomes'))
-    income_dell = models.BooleanField(_('Can delete incomes'))
+    income_read = models.BooleanField(_('Can read incomes'), default=True)
+    income_write = models.BooleanField(_('Can change incomes'), default=True)
+    income_add = models.BooleanField(_('Can add new incomes'), default=True)
+    income_dell = models.BooleanField(_('Can delete incomes'), default=True)
 
-    outcome_read = models.BooleanField(_('Can read outcomes'))
-    outcome_write = models.BooleanField(_('Can change outcomes'))
-    outcome_add = models.BooleanField(_('Can add new outcomes'))
-    outcome_dell = models.BooleanField(_('Can delete outcomes'))
+    outcome_read = models.BooleanField(_('Can read outcomes'), default=True)
+    outcome_write = models.BooleanField(_('Can change outcomes'), default=True)
+    outcome_add = models.BooleanField(_('Can add new outcomes'), default=True)
+    outcome_dell = models.BooleanField(_('Can delete outcomes'), default=True)
 
-    income_category_read = models.BooleanField(_('Can read income category'))
-    income_category_write = models.BooleanField(_('Can change income category'))
-    income_category_add = models.BooleanField(_('Can add new income category'))
-    income_category_dell = models.BooleanField(_('Can delete income category'))
+    income_category_read = models.BooleanField(_('Can read income category'), default=True)
+    income_category_write = models.BooleanField(_('Can change income category'), default=True)
+    income_category_add = models.BooleanField(_('Can add new income category'), default=True)
+    income_category_dell = models.BooleanField(_('Can delete income category'), default=True)
 
-    outcome_category_read = models.BooleanField(_('Can read outcome category'))
-    outcome_category_write = models.BooleanField(_('Can change outcome category'))
-    outcome_category_add = models.BooleanField(_('Can add new outcome category'))
-    outcome_category_dell = models.BooleanField(_('Can delete outcome category'))
+    outcome_category_read = models.BooleanField(_('Can read outcome category'), default=True)
+    outcome_category_write = models.BooleanField(_('Can change outcome category'), default=True)
+    outcome_category_add = models.BooleanField(_('Can add new outcome category'), default=True)
+    outcome_category_dell = models.BooleanField(_('Can delete outcome category'), default=True)
 
-    outcome_place_read = models.BooleanField(_('Can read outcome places'))
-    outcome_place_write = models.BooleanField(_('Can change outcome places'))
-    outcome_place_add = models.BooleanField(_('Can add new outcome places'))
-    outcome_place_dell = models.BooleanField(_('Can delete outcome places'))
+    outcome_place_read = models.BooleanField(_('Can read outcome places'), default=True)
+    outcome_place_write = models.BooleanField(_('Can change outcome places'), default=True)
+    outcome_place_add = models.BooleanField(_('Can add new outcome places'), default=True)
+    outcome_place_dell = models.BooleanField(_('Can delete outcome places'), default=True)
 
 
 class BudgetAccess(models.Model):
@@ -366,6 +378,6 @@ class BudgetAccess(models.Model):
                               verbose_name=_('* Set appropriate rule set'),
                               on_delete=models.PROTECT)
 
-    def __str__(self):
-        return format_lazy('Access rules on budget {budget} for user: {user}',
-                           self.budget, self.target_user)
+    # def __str__(self):
+    #     return str(format_lazy('Access rules on budget {budget} for user: {user}',
+    #                            self.budget, self.target_user))

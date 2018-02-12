@@ -32,7 +32,8 @@ from django.utils.translation import activate, get_language_info
 from django_ajax.mixin import AJAXMixin
 # from django_ajax.decorators import ajax
 
-from budgme.models import Budget, IncomeCategory, Profile
+# from budgme.models import Budget, IncomeCategory, Profile
+from budgme import models
 from budgme import forms
 
 # AJAX_DECORATORS = [
@@ -43,14 +44,28 @@ from budgme import forms
 
 def get_current_budget(request):
     """This method return current budget object for current user
-    based on session cookies"""
+    based on session cookies
+    NOTE! this method hits DB on each call
+    Use get_current_budget_name method if you need only name, not object"""
     budget = request.session.get('budget')
     if not budget:
-        budget = Profile.objects.get(user=request.user).default_budget
+        budget = models.Profile.objects.get(user=request.user).default_budget
         request.session['budget'] = budget.name
     else:
-        budget = Budget.objects.filter(Q(owner=request.user) &
-                                       Q(name=budget)).first()
+        budget = models.Budget.objects.filter(
+            Q(owner=request.user) & Q(name=budget)).first()
+    return budget
+
+
+def get_current_budget_name(request):
+    """This method doing the same as get_current_budget method
+    except it querying the database only if current_budget value
+    is not set yet for current session"""
+    budget = request.session.get('budget')
+    if not budget:
+        budget = models.Profile.objects.get(user=request.user).default_budget
+        request.session['budget'] = budget.name
+        budget = budget.name
     return budget
 
 
@@ -91,13 +106,24 @@ def profile(request):
 class MasterPage(TemplateView):
     template_name = 'budgme/master.html'
 
+    def get_context_data(self, **kwargs):
+        current_budget = get_current_budget(self.request)
+        return {
+            'current_budget': current_budget,
+            'budget_list': models.Budget.objects.filter(
+                Q(owner=self.request.user) & ~Q(id=current_budget.id)),
+            'shared_budgets': models.BudgetAccess.objects.select_related(
+                'budget').filter(Q(target_user=self.request.user) &
+                                 ~Q(budget=current_budget)),
+        }
+
 
 class BaseAjaxRenderer:
     def __init__(self):
         """Any content passed in response must be a
         list of tuple(selector, content)"""
         self.replace_content = None
-        self.main_content = None
+        self.inner_content = None
         self.append_content = None
         self.prepend_content = None
 
@@ -108,7 +134,7 @@ class BaseAjaxRenderer:
             },
             'inner-fragments': {
                 # 'replace inner content'
-                # self.main_content goes here
+                # self.inner_content goes here
             },
             'append-fragments': {
                 # 'append this content'
@@ -121,7 +147,17 @@ class BaseAjaxRenderer:
         }
 
 
-class IncomeCategories(BaseAjaxRenderer):
+class BudgetViews(BaseAjaxRenderer):
+    """All Get & Post CRUD operations for budget urls
+    and change current budget operation"""
+    def ajax_change_budget(self):
+        current_budget = get_current_budget_name(self.request)
+        new_budget = self.request.POST.get('budget')
+        if new_budget and current_budget != new_budget:
+            self.request.session['budget'] = new_budget
+
+
+class IncomeCategoryViews(BaseAjaxRenderer):
     """All Get & Post CRUD operations for income categories urls"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -131,19 +167,18 @@ class IncomeCategories(BaseAjaxRenderer):
 
         def get_queryset(request):
             budget = get_current_budget(request)
-            return IncomeCategory.objects.filter(budget=budget)
+            return models.IncomeCategory.objects.filter(budget=budget)
 
         context = {
             'object_list': get_queryset(self.request),
             'grid_size': get_grid_size(self.request),
+            'page_script': 'budgme/js/in_cat.js',
         }
-        self.main_content = [
+        self.inner_content = [
             ('#main-container', render(self.request,
                                        'budgme/income/in_cat.html', context)),
-        ]
-        self.append_content = [
-            ('#scripts', render(self.request,
-                                'budgme/income/in_cat_scripts.html')),
+            ('#page_script', render(self.request,
+                                    'budgme/page_script.html', context)),
         ]
 
     def ajax_edit_in_cat(self):
@@ -152,7 +187,7 @@ class IncomeCategories(BaseAjaxRenderer):
             if not self._name_unique(form.cleaned_data.get('name')):
                 return
             try:
-                category = IncomeCategory.objects.get(
+                category = models.IncomeCategory.objects.get(
                     id=self.request.POST['id'], budget=self.budget)
             except ObjectDoesNotExist:
                 self._fail_popover(msg=__('Can not find this category in DB!'))
@@ -170,7 +205,7 @@ class IncomeCategories(BaseAjaxRenderer):
         if form.is_valid():
             if not self._name_unique(form.cleaned_data.get('name')):
                 return
-            category = IncomeCategory(
+            category = models.IncomeCategory(
                 budget=self.budget,
                 name=form.cleaned_data.get('name'),
                 description=form.cleaned_data.get('description'))
@@ -195,11 +230,37 @@ class IncomeCategories(BaseAjaxRenderer):
                                msg=form.errors.as_text())
 
     def ajax_del_in_cat(self):
-        pass
+        income_id = self.request.POST.get('id')
+        budget = get_current_budget(self.request)
+        category = models.IncomeCategory.objects.filter(budget=budget,
+                                                        id=income_id)
+        if not category:
+            self._fail_popover(
+                title=__('Failed to delete category'),
+                msg=__('No such category found') + ' (id: ' + str(income_id) + ')')
+            return
+        incomes = models.Income.objects.filter(budget=budget,
+                                               category=category)
+        incomes_count = len(incomes)
+        if incomes_count > 0:
+            msg = __('You have related incomes on this category '
+                     'that will be lost!') + \
+                  ' (' + str(incomes_count) + ') ' + \
+                  __('Are you sure you want to continue?')
+            self._fail_popover(msg=msg)
+            return
+
+        try:
+            category.delete()
+        except Exception as why:
+            self._fail_popover(msg=str(why))
+        else:
+            self._success_popover(
+                msg=__('Income source deleted from your budget!'))
 
     def _name_unique(self, name):
         self.budget = get_current_budget(self.request)
-        category_name_exist = IncomeCategory.objects.filter(
+        category_name_exist = models.IncomeCategory.objects.filter(
             Q(budget=self.budget) &
             Q(name=name) &
             ~Q(id=self.request.POST['id'])).count() > 0
@@ -212,34 +273,41 @@ class IncomeCategories(BaseAjaxRenderer):
 
     def _fail_popover(self, title=__('Error'),
                       msg=__('Fail to save your changes'), errors={}):
-        if errors:
-            try:
-                msg += '\n'
-                for field, error in errors.items():
-                    msg += '- ' + field + ': ' + error[0] + '\n'
-            except:
-                msg += '\n' + str(errors)
-        self.response.update({
-            'success': False,
+        # if errors:
+        #     try:
+        #         msg += '\n'
+        #         for field, error in errors.items():
+        #             msg += '- ' + field + ': ' + error[0] + '\n'
+        #     except:
+        #         msg += '\n' + str(errors)
+        popover = {
             'title': title,
             'content': msg,
-            'template': render(
-                self.request, 'budgme/popovers/popover_error.html'),
+            'template': render(self.request,
+                               'budgme/popovers/popover_error.html'),
+        }
+        self.response.update({
+            'success': False,
+            'popover': popover,
         })
 
     def _success_popover(self, title=__('Success'),
                          msg=__('Your changes saved!')):
-        self.response.update({
-            'success': True,
+        popover = {
             'title': title,
             'content': msg,
-            'template': render(
-                self.request, 'budgme/popovers/popover_success.html'),
+            'template': render(self.request,
+                               'budgme/popovers/popover_success.html'),
+        }
+        self.response.update({
+            'success': True,
+            'popover': popover,
         })
 
 
 AjaxViews = (
-    IncomeCategories,
+    BudgetViews,
+    IncomeCategoryViews,
 )
 
 
@@ -262,13 +330,18 @@ class AJAXRenderer(*AjaxViews, AJAXMixin, LoginRequiredMixin, View):
         self._update_response()
 
     def page_404(self):
-        self.main_content = [
+        self.inner_content = [
             ('#main-container', render(self.request, 'budgme/404.html')),
         ]
 
     def ajax_home(self):
-        self.main_content = [
+        context = {
+            'page_script': 'budgme/js/home.js',
+        }
+        self.inner_content = [
             ('#main-container', render(self.request, 'budgme/home.html')),
+            ('#page_script', render(self.request,
+                                    'budgme/page_script.html', context)),
         ]
 
     def _update_response(self):
@@ -278,8 +351,8 @@ class AJAXRenderer(*AjaxViews, AJAXMixin, LoginRequiredMixin, View):
                     selector: str(html.content).replace('\\n', '')[2:-1],
                 })
 
-        if self.main_content:
-            for selector, html in self.main_content:
+        if self.inner_content:
+            for selector, html in self.inner_content:
                 self.response['inner-fragments'].update({
                     selector: str(html.content).replace('\\n', '')[2:-1],
                 })

@@ -1,6 +1,7 @@
 $(document).ready(function(){
     $("#table-new-in_cat").hide();
     handle_table_td_clicks();
+    init_budget_select_change(budget_select);
 });
 
 $("#btn-show-new-in-cat-row").click(function(event){
@@ -144,25 +145,7 @@ function save_in_cat(id) {
             description: new_descr,
         };
         ajaxPost('ajax/edit-in-cat', data, function (content) {
-            //on success
             row = $("#in_cat-id_" + id);
-            row.popover({
-                delay: { hide: 3000 },
-                title: content.title,
-                content: content.content,
-                template: content.template,
-                trigger: 'click|focus',
-            });
-
-            row.popover('show');
-            row.popover('toggle');
-            $("#btn-edit-in_cat-id_" + id).prop('disabled', true);
-            $(this).delay(3000).queue(function() {
-                row.popover('destroy');
-                $("#btn-edit-in_cat-id_" + id).prop('disabled', false);
-                $(this).dequeue();
-            });
-
             if (content.success){
                 name_elem.parent().find('p').html(name_elem.prop('value'));
                 descr_elem.parent().find('p').html(descr_elem.prop('value'));
@@ -170,6 +153,7 @@ function save_in_cat(id) {
             else{
                 focusin_row(id);
             }
+            show_popover(row, content.popover, $("#btn-edit-in_cat-id_" + id));
         });
     }
 }
@@ -195,7 +179,7 @@ function add_in_cat() {
         else{
             row = $("#table-new-in_cat");
         }
-        show_popover(row, content, $("#btn-add-new-in_cat"));
+        show_popover(row, content.popover, $("#btn-add-new-in_cat"));
         handle_table_td_clicks();
     });
 }
@@ -209,30 +193,6 @@ function delete_in_cat(id) {
     });
 }
 
-/*
-* This function init and show default popover for element
-* and freeze elem to prevent DB spam.
-* Default delay is 3 sec.
-* */
-function show_popover(elem, content, freeze_elem) {
-    if (!freeze_elem){
-        freeze_elem = elem;
-    }
-    elem.popover({
-        delay: { hide: 3000 },
-        title: content.title,
-        content: content.content,
-        template: content.template,
-        trigger: 'click|focus',
-    });
-
-    elem.popover('show');
-    elem.popover('toggle');
-    freeze_elem.prop('disabled', true);
-
-    $(this).delay(3000).queue(function() {
-        row.popover('destroy');
-        freeze_elem.prop('disabled', false);
-        $(this).dequeue();
-    });
+function budget_select() {
+    getAjaxPage('/income-categories');
 }
