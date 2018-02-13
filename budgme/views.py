@@ -103,7 +103,7 @@ def profile(request):
     return render(request, 'budgme/profile.html')
 
 
-class MasterPage(TemplateView):
+class MasterPage(LoginRequiredMixin, TemplateView):
     template_name = 'budgme/master.html'
 
     def get_context_data(self, **kwargs):
