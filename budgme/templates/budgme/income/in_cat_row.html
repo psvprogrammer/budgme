@@ -24,4 +24,17 @@
            class="btn btn-danger table-btn" style="display: none;">Delete</button>
     </td>
 </tr>
+{% include 'budgme/income/delete_warnings_row.html' %}
+{#<tr id="in_cat_warnings-id_{{ id }}" style="display: none;">#}
+{#    <td colspan="2" class="field">#}
+{#        <div class="alert alert-danger" role="alert"#}
+{#             id="delete-warning-id_{{ id }}"></div>#}
+{#    </td>#}
+{#    <td class="buttons text-center">#}
+{#        <button type="button" id="btn-cancel-delete-in_cat-id_{{ id }}"#}
+{#           class="btn btn-warning table-btn cancel-del">Cancel</button>#}
+{#        <button type="button" id="force-del-in_cat-id_{{ id }}"#}
+{#                class="btn btn-danger table-btn force-del">Force Delete</button>#}
+{#    </td>#}
+{#</tr>#}
 {% endwith %}

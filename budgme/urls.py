@@ -72,6 +72,7 @@ urlpatterns = [
     url(r'^ajax/add-in-cat$', views.AJAXRenderer.as_view(), name='ajax_add_in_cat'),
     url(r'^ajax/edit-in-cat$', views.AJAXRenderer.as_view(), name='ajax_edit_in_cat'),
     url(r'^ajax/del-in-cat$', views.AJAXRenderer.as_view(), name='ajax_del_in_cat'),
+    url(r'^ajax/force-del-in-cat$', views.AJAXRenderer.as_view(), name='ajax_force_del_in_cat'),
 
     # budget pages
     url(r'^ajax/change_budget$', views.AJAXRenderer.as_view(), name='ajax_change_budget'),

@@ -167,7 +167,8 @@ class IncomeCategoryViews(BaseAjaxRenderer):
 
         def get_queryset(request):
             budget = get_current_budget(request)
-            return models.IncomeCategory.objects.filter(budget=budget)
+            return models.IncomeCategory.objects.filter(budget=budget,
+                                                        is_active=True)
 
         context = {
             'object_list': get_queryset(self.request),
@@ -225,27 +226,24 @@ class IncomeCategoryViews(BaseAjaxRenderer):
                             row_context)),
                 ]
                 self._success_popover(msg=__('New income source added'))
+                self.response.update({'id': category.id})
         else:
             self._fail_popover(title=__('Failed to add new resource!'),
                                msg=form.errors.as_text())
 
     def ajax_del_in_cat(self):
-        income_id = self.request.POST.get('id')
-        budget = get_current_budget(self.request)
-        category = models.IncomeCategory.objects.filter(budget=budget,
-                                                        id=income_id)
+        category, budget = self._get_category_and_budget()
         if not category:
             self._fail_popover(
                 title=__('Failed to delete category'),
-                msg=__('No such category found') + ' (id: ' + str(income_id) + ')')
+                msg=__('No such category found'))
             return
         incomes = models.Income.objects.filter(budget=budget,
                                                category=category)
         incomes_count = len(incomes)
         if incomes_count > 0:
-            msg = __('You have related incomes on this category '
-                     'that will be lost!') + \
-                  ' (' + str(incomes_count) + ') ' + \
+            msg = __('You have related incomes (' + str(incomes_count) + ') '
+                     'on this category that will be lost!\n') + \
                   __('Are you sure you want to continue?')
             self._fail_popover(msg=msg)
             return
@@ -257,6 +255,37 @@ class IncomeCategoryViews(BaseAjaxRenderer):
         else:
             self._success_popover(
                 msg=__('Income source deleted from your budget!'))
+
+    def ajax_force_del_in_cat(self):
+        category, budget = self._get_category_and_budget()
+        if not category:
+            self._fail_popover(
+                title=__('Failed to delete category'),
+                msg=__('No such category found'))
+            return
+        incomes = models.Income.objects.filter(budget=budget,
+                                               category=category)
+        incomes_count = len(incomes)
+        if incomes_count > 0:
+            category.is_active = False
+            category.save()
+        else:
+            # just deleting this category from DB
+            category.delete()
+        self._success_popover(
+            msg=__('Income source deleted from your budget!'))
+
+    def _get_category_and_budget(self):
+        """Trhis method return category object from DB based on
+        POST['id'] and current budget for current user"""
+        income_id = self.request.POST.get('id')
+        budget = get_current_budget(self.request)
+        try:
+            category = models.IncomeCategory.objects.get(budget=budget,
+                                                         id=income_id)
+        except models.IncomeCategory.DoesNotExist:
+            category = None
+        return category, budget
 
     def _name_unique(self, name):
         self.budget = get_current_budget(self.request)

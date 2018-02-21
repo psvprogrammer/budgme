@@ -24,6 +24,22 @@ $("#btn-add-new-in_cat").click(function(event){
     add_in_cat();
 });
 
+//cancel delete income source click
+$(".cancel-del").each(function () {
+    $(this).on('click', function (event) {
+        row_elem = $(this).parent().parent();
+        row_elem.hide();
+    });
+});
+
+//force delete income source click
+$(".force-del").each(function () {
+    $(this).on('click', function (event) {
+        id = $(this).prop('id').replace('force-del-in_cat-id_', '');
+        force_delete_in_cat(id);
+    });
+});
+
 /* table td click events: Save | Cancel | Delete buttons
 /* and "Enter" key pres event equals to 'Save' button click */
 function handle_table_td_clicks() {
@@ -170,7 +186,7 @@ function add_in_cat() {
     ajaxPost('ajax/add-in-cat', data, function (content) {
         //on success
         if (content.success){
-            row = $('table#table-in_cat>tbody').find('tr').last();
+            row = $("#in_cat-id_" + content.id);
 
             $("#table-new-in_cat").hide();
             $("#btn-cancel-new-in-cat").hide();
@@ -190,6 +206,29 @@ function delete_in_cat(id) {
     };
     ajaxPost('ajax/del-in-cat', data, function (content) {
         //on success
+        if (content.success){
+            $('#in_cat-id_' + id).remove();
+        }
+        else{
+            warning_row = $('#in_cat_warnings-id_' + id);
+            $('#delete-warning-id_' + id).html(content.popover.content);
+            warning_row.show();
+        }
+    });
+}
+
+function force_delete_in_cat(id) {
+    data = {
+        id: id,
+    };
+    ajaxPost('ajax/force-del-in-cat', data, function (content) {
+        //on success
+        if (content.success){
+            $('#in_cat-id_' + id).remove();
+            $('#in_cat_warnings-id_' + id).remove();
+        }
+        elem = $("tr[id^='in_cat-id_']").last();
+        show_popover(elem, content.popover);
     });
 }
 

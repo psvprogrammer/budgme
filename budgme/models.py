@@ -70,6 +70,7 @@ class Budget(models.Model):
                                    'of this budget'), max_length=254)
     icon = models.CharField(_('Set icon for your budget'),
                             default='fa-money', blank=True, max_length=100)
+    is_active = models.BooleanField(_('Is this budget is active?'), default=True)
 
     def get_balance(self, period):
         return str(period)
@@ -96,6 +97,8 @@ class IncomeCategory(models.Model):
                                    help_text=_('Describe what is for this '
                                                'income category'),
                                    max_length=254, default='')
+    is_active = models.BooleanField(_('Should budget count incomes '
+                                      'from this category?'), default=True)
 
     def __str__(self):
         return str(format_lazy('{name}, budget: {budget}',
@@ -119,6 +122,8 @@ class OutcomeCategory(models.Model):
                                    help_text=_('Describe what this '
                                                'outcome category is for'),
                                    max_length=254)
+    is_active = models.BooleanField(_('Should budget count outcomes '
+                                      'from this category?'), default=True)
 
     def __str__(self):
         return str(format_lazy('{name}, budget: {budget}',

@@ -104,7 +104,7 @@ function show_popover(elem, content, freeze_elem) {
     freeze_elem.prop('disabled', true);
 
     $(this).delay(3000).queue(function() {
-        row.popover('destroy');
+        elem.popover('destroy');
         freeze_elem.prop('disabled', false);
         $(this).dequeue();
     });
