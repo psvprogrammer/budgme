@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    $("#table-new-in_cat").hide();
     handle_table_td_clicks();
     init_budget_select_change(budget_select);
 });

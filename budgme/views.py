@@ -111,7 +111,8 @@ class MasterPage(LoginRequiredMixin, TemplateView):
         return {
             'current_budget': current_budget,
             'budget_list': models.Budget.objects.filter(
-                Q(owner=self.request.user) & ~Q(id=current_budget.id)),
+                Q(owner=self.request.user) & ~Q(id=current_budget.id) &
+                Q(is_active=True)),
             'shared_budgets': models.BudgetAccess.objects.select_related(
                 'budget').filter(Q(target_user=self.request.user) &
                                  ~Q(budget=current_budget)),
@@ -377,24 +378,25 @@ class AJAXRenderer(*AjaxViews, AJAXMixin, LoginRequiredMixin, View):
         if self.replace_content:
             for selector, html in self.replace_content:
                 self.response['fragments'].update({
-                    selector: str(html.content).replace('\\n', '')[2:-1],
+                    selector: html.content.decode().replace('\n', ''),
                 })
 
         if self.inner_content:
             for selector, html in self.inner_content:
                 self.response['inner-fragments'].update({
-                    selector: str(html.content).replace('\\n', '')[2:-1],
+                    selector: html.content.decode().replace('\n', ''),
                 })
 
         if self.append_content:
             for selector, html in self.append_content:
                 self.response['append-fragments'].update({
-                    selector: str(html.content).replace('\\n', '')[2:-1],
+                    selector: html.content.decode().replace('\n', ''),
                 })
 
         if self.prepend_content:
             for selector, html in self.prepend_content:
                 self.response['prepend-fragments'].update({
-                    selector: str(html.content).replace('\\n', '')[2:-1],
+                    # selector: str(html.content.decode()).replace('\\n', '')[2:-1],
+                    selector: html.content.decode().replace('\n', ''),
                 })
 
