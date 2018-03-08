@@ -1,5 +1,8 @@
 body{
 	font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif !important;
+	margin-top: 0px !important;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
 }
 
 .btn-rectangle{
@@ -18,7 +21,7 @@ body{
 	height: 40px;
 }
 .no-padding{
-	padding: 0;
+	padding: 0px;
 }
 .one-line{
 	overflow: hidden;

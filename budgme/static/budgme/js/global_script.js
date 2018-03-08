@@ -1,3 +1,16 @@
+/* this JQuery code snippet allows to add handler on
+/* ‘show’/’hide’ events using .on() method
+/* source: http://viralpatel.net/blogs/jquery-trigger-custom-event-show-hide-element/ */
+(function ($) {
+    $.each(['show', 'hide'], function (i, ev) {
+        var el = $.fn[ev];
+        $.fn[ev] = function () {
+            this.trigger(ev);
+            return el.apply(this, arguments);
+        };
+    });
+})(jQuery);
+
 $(document).ready(function() {
 
     //===> tooltip init
@@ -45,6 +58,7 @@ function load_page_content() {
     if ($.inArray(window.location.pathname, exclude_ajax_urls) == -1){
         getAjaxPage(window.location.pathname);
     }
+    $("#loader-animation").fadeOut(1000);
 }
 
 function getAjaxPage(url) {

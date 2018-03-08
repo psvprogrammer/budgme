@@ -1,6 +1,10 @@
 $(document).ready(function(){
     handle_table_td_clicks();
     init_budget_select_change(budget_select);
+
+    $("#table-new-in_cat").on('show', function(){
+        $("#new-in_cat-name").focus();
+    });
 });
 
 $("#btn-show-new-in-cat-row").click(function(event){
@@ -60,6 +64,9 @@ function handle_table_td_clicks() {
                 else if(event.target.innerText == 'Delete') {
                     delete_in_cat(id);
                 }
+                else if(event.target.innerText == 'Cancel') {
+                    restore_init_values(id);
+                }
                 focusout_row(id, row_elem, event);
             }
             else{
@@ -85,6 +92,10 @@ function handle_table_td_clicks() {
             }
         });
     });
+}
+
+function restore_init_values(id) {
+    $("#new_name-id_" + id).prop('value', $("#name-id_" + id).html());
 }
 
 function focusin_row(id, row_elem, event) {
